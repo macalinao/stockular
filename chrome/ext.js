@@ -12,7 +12,11 @@ function loadBloomberg() {
     }
 
     $('.bloomberg').each(function() {
-      $(this).qtip();
+      var $this = $(this);
+      var company = $this.html();
+      $this.qtip({
+        content: company
+      });
     });
   });
 }
