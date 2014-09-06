@@ -5,8 +5,8 @@
   "description": "This extension provides financial details behind stock tickers.",
   "version": "1.0",
   "content_scripts": [{
-    "css": ["jquery.qtip.min.css", "style.css"],
-    "js": ["stocks.js",  "jquery.min.js", "highlight.min.js", "highstock.js", "exporting.js", "jquery.qtip.min.js", "ext.js"],
+    "css": ["style.css", "bootstrap.min.css"],
+    "js": ["jquery.min.js", "highlight.min.js", "highstock.js", "exporting.js", "ext.js", "bootstrap.min.js"],
     "matches": ["http://*/*", "https://*/*"],
     "run_at": "document_end"
   }]
