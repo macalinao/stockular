@@ -1,3 +1,9 @@
+var aapl;
+
+function fake(data) {
+  aapl = data;
+}
+
 function loadBloomberg() {
   var myStocks = {};
   $(function() {
@@ -27,8 +33,8 @@ function loadBloomberg() {
           '<small>Powered by Bloomberg</small>'
         ].join('')
       });
-    $.getJSON('http://www.highcharts.com/samples/data/jsonp.php?filename=aapl-c.json&callback=?', function (data) {
-
+      $.getJSON('http://www.highcharts.com/samples/data/jsonp.php?filename=aapl-c.json&callback=fake', function(data) {
+        data = aapl;
         // Create the chart
         $('#chart-aapl').highcharts('StockChart', {
           rangeSelector: {
