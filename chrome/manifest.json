@@ -4,15 +4,9 @@
   "name": "Bloomberg Chrome Extension",
   "description": "This extension provides financial details behind stock tickers.",
   "version": "1.0",
-
-  "browser_action": {
-    "default_icon": "icon.png",
-    "default_popup": "popup.html"
-  },
-  "permissions": [
-    "https://bloomberglabs.com"
-  ],
   "content_scripts": [{
+    "css": ["jquery.qtip.min.css"],
+    "js": ["stocks.json", "jquery.min.js", "jquery.qtip.min.js", "tooltip.js"],
     "matches": ["http://*/*", "https://*/*"]
   }]
 }
