@@ -1,13 +1,6 @@
 import java.io.*;
 import java.util.*;
 public class StockList {
-	static class StockCompany{
-		String name;
-		String symbol;
-		StockCompany(String n, String s){
-			name = n; symbol  = s;
-		}
-	}
 	public static ArrayList<StockCompany> list;
 	static{
 		list = new ArrayList<StockCompany>();

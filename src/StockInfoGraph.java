@@ -80,7 +80,7 @@ public class StockInfoGraph {
         d_decimalFormat.setMaximumFractionDigits(3);
     }
 
-    private ArrayList<StockValue> getGraph() throws Exception {
+    public ArrayList<StockValue> getGraph() throws Exception {
         list = new ArrayList<StockValue>();
         SessionOptions sessionOptions = new SessionOptions();
         sessionOptions.setServerHost(d_host);
@@ -148,13 +148,13 @@ public class StockInfoGraph {
             
             list.add(new StockValue(time.calendar().getTime(), close, volume));
 
-            System.out.println(d_dateFormat.format(time.calendar().getTime()) + "\t" +
+            /*System.out.println(d_dateFormat.format(time.calendar().getTime()) + "\t" +
                     d_decimalFormat.format(open) + "\t\t" +
                     d_decimalFormat.format(high) + "\t\t" +
                     d_decimalFormat.format(low) + "\t\t" +
                     d_decimalFormat.format(close) + "\t\t" +
                     d_decimalFormat.format(numEvents) + "\t\t" +
-                    d_decimalFormat.format(volume));
+                    d_decimalFormat.format(volume));*/
         }
     }
 
