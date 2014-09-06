@@ -1,12 +1,7 @@
 .bloomberg {
-  text-decoration: underline;
   color: #CF5300;
 }
 
-.bloomberg:hover {
-  text-decoration: none; 
-  color: #CFCC00;
-}
 
 .stock-chart {
   width: 100%;
