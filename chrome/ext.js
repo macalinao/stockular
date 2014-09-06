@@ -18,7 +18,7 @@ function loadBloomberg() {
       var $this = $(this);
       var company = names[$this.html()];
       $this.qtip({
-        content: company
+        content: '<h3>' + company + '</h3>'
       });
     });
   });
