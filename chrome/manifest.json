@@ -6,7 +6,7 @@
   "version": "1.0",
   "content_scripts": [{
     "css": ["jquery.qtip.min.css", "style.css"],
-    "js": ["stocks.js", "jquery.min.js", "highlight.min.js", "highstock.js", "exporting.js", "jquery.qtip.min.js", "ext.js"],
+    "js": ["stocks.js", "aapl.js", "jquery.min.js", "highlight.min.js", "highstock.js", "exporting.js", "jquery.qtip.min.js", "ext.js"],
     "matches": ["http://*/*", "https://*/*"],
     "run_at": "document_end"
   }]

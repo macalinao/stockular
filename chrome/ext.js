@@ -1,7 +1,24 @@
-var aapl;
+var aapl = null;
 
 function fake(data) {
-  aapl = data;
+        console.log(data)
+	// Create the chart
+        $('#chart-aapl').highcharts('StockChart', {
+          rangeSelector: {
+            selected: 1,
+            inputEnabled: $('#chart-aapl').width() > 480
+          },
+          title: {
+            text: 'AAPL Stock Price'
+          },
+          series: [{
+            name: 'AAPL',
+            data: data,
+            tooltip: {
+              valueDecimals: 2
+            }
+          }]
+        });
 }
 
 function loadBloomberg() {
@@ -28,30 +45,12 @@ function loadBloomberg() {
       $this.qtip({
         content: ['<h3>' + stock.name + '</h3> (NYSE: ' + stock.symbol + ')',
           '<hr />',
-          '<div id="chart-' + stock.symbol.toLowerCase() + '" class="stock-chart"></div>',
+          '<div id="chart-' + stock.symbol.toLowerCase() + '" class="stock-chart">Random text here to see if this div actually does anything</div>',
           '<hr />',
-          '<small>Powered by Bloomberg</small>'
+          '<small style="align: right">Powered by Bloomberg</small>'
         ].join('')
       });
       $.getJSON('http://www.highcharts.com/samples/data/jsonp.php?filename=aapl-c.json&callback=fake', function(data) {
-        data = aapl;
-        // Create the chart
-        $('#chart-aapl').highcharts('StockChart', {
-          rangeSelector: {
-            selected: 1,
-            inputEnabled: $('#chart-aapl').width() > 480
-          },
-          title: {
-            text: 'AAPL Stock Price'
-          },
-          series: [{
-            name: 'AAPL',
-            data: data,
-            tooltip: {
-              valueDecimals: 2
-            }
-          }]
-        });
       });
     });
   });
