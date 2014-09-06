@@ -66,6 +66,7 @@ function loadBloomberg() {
 
     $('.bloomberg').each(function() {
       var $this = $(this);
+      var stock = myStocks[$this.html()];
       $this.popover({
         animation: true,
         content: "yes",
@@ -74,7 +75,6 @@ function loadBloomberg() {
         trigger: "hover",
         title: "bitch pls"
       })
-      var stock = myStocks[$this.html()];
     });
   });
 }
