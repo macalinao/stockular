@@ -6,7 +6,8 @@
   "version": "1.0",
   "content_scripts": [{
     "css": ["jquery.qtip.min.css"],
-    "js": ["stocks.json", "jquery.min.js", "jquery.qtip.min.js", "tooltip.js"],
-    "matches": ["http://*/*", "https://*/*"]
+    "js": ["stocks.js", "jquery.min.js", "highlight.min.js", "jquery.qtip.min.js", "ext.js"],
+    "matches": ["http://*/*", "https://*/*"],
+    "run_at": "document_end"
   }]
 }
