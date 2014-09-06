@@ -81,7 +81,7 @@ def main():
     # Start a Session
     if not session.start():
         print "Failed to start session."
-        return
+       return
 
     if not session.openService(APIFLDS_SVC):
         print "Failed to open", APIFLDS_SVC
