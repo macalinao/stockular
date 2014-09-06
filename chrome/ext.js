@@ -21,6 +21,10 @@ function loadBloomberg() {
       var stock = stocks[$this.html()];
       $this.qtip({
         content: '<h3>' + stock.name + '</h3> (NYSE: ' + stock.symbol + ')'
+                   + '<hr />'
+                   + 'Insert chart here.'
+                   + '<hr />'
+                   + '<small>Powered by Bloomberg</small>'
       });
     });
   });
