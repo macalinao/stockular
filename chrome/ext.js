@@ -1,3 +1,49 @@
+/* 
+@start: api stuff
+@author: Andrew Liu
+*/
+
+var URL = "http://cywoods.wynd07.com/work/";
+
+function api(url, data, callb){
+    $.ajax({
+        type: 'GET', 
+            url: url,
+            async: true,
+            cache: false,
+            dataType: 'json',
+            data: (data!=""&&data!=null ? data : ""), 
+            success: function(data, textStatus, jqXHR){
+              if (typeof data === "undefined" || data == null){
+                callb(null);
+                alert("Request failed");
+                return;
+              }
+              callb(data);
+            }
+        });
+}
+
+var stocksList = [];
+
+$(document).ready(function(){
+  //api tests
+  api(URL + "AAPL.json", null, function(data){
+    console.log(data);
+  });
+  api(URL+"list.json", null, function(data){
+    console.log(data);
+    stocksList = data;
+  })
+});
+
+
+/*
+@end: api stuff
+*/
+
+
+
 var aapl = null;
 
 function fake(data) {
