@@ -1,4 +1,9 @@
 .bloomberg {
   text-decoration: underline;
-  background-color: #cccccc;
+  color: #CF5300;
+}
+
+.bloomberg:hover {
+  text-decoration: none; 
+  color: #CFCC00;
 }
