@@ -1,3 +1,5 @@
+
+
 function loadBloomberg() {
   $(function() {
     for (var i = 0; i < stocks.length; i++) {
