@@ -67,6 +67,11 @@ function loadBloomberg() {
     $('.bloomberg').each(function() {
       var $this = $(this);
       var stock = myStocks[$this.html()];
+      if (!stock.detailedOnce) {
+        $this.append(' (NYSE: ' + stock.symbol + ')');
+        stock.detailedOnce = true;
+      }
+
       $this.popover({
         animation: true,
         content: "yes",
