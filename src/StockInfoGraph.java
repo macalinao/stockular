@@ -1,8 +1,10 @@
-package com.wynd.bloomberg;
+
 
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 
 import com.bloomberglp.blpapi.Datetime;
 import com.bloomberglp.blpapi.Element;
@@ -18,7 +20,7 @@ import com.bloomberglp.blpapi.SessionOptions;
 
 
 public class StockInfoGraph {
-
+	
     private static final Name BAR_DATA       = new Name("barData");
     private static final Name BAR_TICK_DATA  = new Name("barTickData");
     private static final Name OPEN           = new Name("open");
@@ -34,42 +36,42 @@ public class StockInfoGraph {
 
     private String            d_host;
     private int               d_port;
-    private String            d_security;
-    private String            d_eventType;
-    private int               d_barInterval;
     private boolean           d_gapFillInitialBar;
     private String            d_startDateTime;
     private String            d_endDateTime;
     private SimpleDateFormat  d_dateFormat;
     private DecimalFormat     d_decimalFormat;
+    private String stock;
+    private String security;
+    private int interval;
+    private ArrayList<StockValue> list;
 
     public static void main(String[] args) throws Exception {
-        StockInfoGraph example = new StockInfoGraph();
-        example.run();
+        StockInfoGraph example = new StockInfoGraph("AAPL", 2);
+        System.out.println(example.getGraph());
     }
 
     private Calendar getPreviousTradingDate()
     {
-        Calendar prevDate = Calendar.getInstance();
-        prevDate.roll(Calendar.DAY_OF_MONTH, -1);
-        if (prevDate.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY) {
-            prevDate.roll(Calendar.DAY_OF_MONTH, -2);
+        Calendar date = Calendar.getInstance();
+        date.setTime(new Date());
+        //date.roll(Calendar.DAY_OF_MONTH, -2);
+        date.set(Calendar.DAY_OF_MONTH, 4);
+        if (date.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY) {
+        	date.add(Calendar.DAY_OF_MONTH, -2);
         }
-        else if (prevDate.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY) {
-            prevDate.roll(Calendar.DAY_OF_MONTH, -1);
+        else if (date.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY) {
+        	date.add(Calendar.DAY_OF_MONTH, -1);
         }
-        prevDate.set(Calendar.HOUR_OF_DAY, 13);
-        prevDate.set(Calendar.MINUTE, 30);
-        prevDate.set(Calendar.SECOND, 0);
-        return prevDate;
+        return date;
     }
 
-    public StockInfoGraph() {
+    public StockInfoGraph(String stock, int _int) {
         d_host = "10.8.8.1";
         d_port = 8194;
-        d_barInterval = 1;
-        d_security = "IBM US Equity";
-        d_eventType = "TRADE";
+        interval = _int;
+        this.stock = stock;
+        security = stock+" US Equity";
         d_gapFillInitialBar = false;
 
         d_dateFormat = new SimpleDateFormat();
@@ -78,7 +80,8 @@ public class StockInfoGraph {
         d_decimalFormat.setMaximumFractionDigits(3);
     }
 
-    private void run() throws Exception {
+    private ArrayList<StockValue> getGraph() throws Exception {
+        list = new ArrayList<StockValue>();
         SessionOptions sessionOptions = new SessionOptions();
         sessionOptions.setServerHost(d_host);
         sessionOptions.setServerPort(d_port);
@@ -87,19 +90,17 @@ public class StockInfoGraph {
         Session session = new Session(sessionOptions);
         if (!session.start()) {
             System.err.println("Failed to start session.");
-            return;
+            return list;
         }
         if (!session.openService("//blp/refdata")) {
             System.err.println("Failed to open //blp/refdata");
-            return;
+            return list;
         }
 
         sendIntradayBarRequest(session);
-
-        // wait for events from session.
         eventLoop(session);
-
         session.stop();
+        return list;
     }
 
     private void eventLoop(Session session) throws Exception {
@@ -144,6 +145,8 @@ public class StockInfoGraph {
             double close = bar.getElementAsFloat64(CLOSE);
             int numEvents = bar.getElementAsInt32(NUM_EVENTS);
             long volume = bar.getElementAsInt64(VOLUME);
+            
+            list.add(new StockValue(time.calendar().getTime(), close, volume));
 
             System.out.println(d_dateFormat.format(time.calendar().getTime()) + "\t" +
                     d_decimalFormat.format(open) + "\t\t" +
@@ -173,16 +176,14 @@ public class StockInfoGraph {
         Request request = refDataService.createRequest(
                 "IntradayBarRequest");
 
-        // only one security/eventType per request
-        request.set("security", d_security);
-        request.set("eventType", d_eventType);
-        request.set("interval", d_barInterval);
+        request.set("security", security);
+        request.set("eventType", "TRADE");
+        request.set("interval", interval);
 
         if (d_startDateTime == null || d_endDateTime == null) {
             Calendar calendar = getPreviousTradingDate();
             Datetime prevTradeDateTime = new Datetime(calendar);
 
-            // set the end date for next day
             calendar.roll(Calendar.DAY_OF_MONTH, +1);
             Datetime endDateTime = new Datetime(calendar);
 
@@ -211,4 +212,3 @@ public class StockInfoGraph {
     }
 
 }
-

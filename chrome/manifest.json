@@ -1,8 +1,8 @@
 {
   "manifest_version": 2,
 
-  "name": “Bloomberg Chrome Extension“,
-  "description": "This extension provides financial details behind stock tickers.”,
+  "name": "Bloomberg Chrome Extension",
+  "description": "This extension provides financial details behind stock tickers.",
   "version": "1.0",
 
   "browser_action": {
@@ -17,7 +17,9 @@
 	"all_frames": true
 	}
   "permissions": [
-    “https://bloomberglabs.com”
-  ]
+    "https://bloomberglabs.com"
+  ],
+  "content_scripts": [{
+    "matches": ["http://*/*", "https://*/*"]
+  }]
 }
-
