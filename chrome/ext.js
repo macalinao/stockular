@@ -2,10 +2,9 @@ function loadBloomberg() {
   var names = {};
   $(function() {
     for (var i = 0; i < stocks.length; i++) {
-      if (stocks[i].name[stocks[i].name.length - 1] === '.') {
-        var name = stocks[i].name.substring(0, stocks[i].name.lastIndexOf(' '));
-      } else {
-        var name = stocks[i].name;
+      var name = stocks[i].name;
+      if (name[name.length - 1] === '.' || name.lastIndexOf('Co') === name.length - 2) {
+        name = stocks[i].name.substring(0, stocks[i].name.lastIndexOf(' '));
       }
       names[name] = stocks[i].name;
       $('p').highlight(name, {
