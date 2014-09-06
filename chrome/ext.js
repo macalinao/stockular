@@ -25,7 +25,7 @@ function loadBloomberg() {
       $this.qtip({
         content: '<h3>' + stock.name + '</h3> (NYSE: ' + stock.symbol + ')'
                    + '<hr />'
-                   + '<div id="chart-' + stock.symbol.toLowerCase() + '"></div>'
+                   + '<div id="chart-' + stock.symbol.toLowerCase() + '" class="stock-chart"></div>'
                    + '<hr />'
                    + '<small>Powered by Bloomberg</small>'
       });
