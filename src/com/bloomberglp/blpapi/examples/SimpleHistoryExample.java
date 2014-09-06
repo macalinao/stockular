@@ -41,7 +41,7 @@ public class SimpleHistoryExample {
 
     private void run(String[] args) throws Exception
     {
-        String serverHost = "localhost";
+        String serverHost = "10.8.8.1";
         int serverPort = 8194;
 
         SessionOptions sessionOptions = new SessionOptions();
@@ -68,6 +68,7 @@ public class SimpleHistoryExample {
         Element fields = request.getElement("fields");
         fields.appendValue("PX_LAST");
         fields.appendValue("OPEN");
+        fields.appendValue("HIGH");
 
         request.set("periodicityAdjustment", "ACTUAL");
         request.set("periodicitySelection", "MONTHLY");

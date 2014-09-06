@@ -251,7 +251,7 @@ public class ContributionsMktdataExample {
             session.sendAuthorizationRequest(authRequest, identity, cid);
 
             long startTime = System.currentTimeMillis();
-            long waitTime = 10000; // 10 seconds
+            long waitTime = 10000; // 10 hours
             while (true) {
                 d_authorizationStatus.wait(waitTime);
                 if (d_authorizationStatus.get(cid) != AuthorizationStatus.WAITING) {

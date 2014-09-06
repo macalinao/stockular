@@ -133,9 +133,9 @@ public class StockInfoGraph {
     private void processMessage(Message msg) throws Exception {
         Element data = msg.getElement(BAR_DATA).getElement(BAR_TICK_DATA);
         int numBars = data.numValues();
-        System.out.println("Response contains " + numBars + " bars");
+        /*System.out.println("Response contains " + numBars + " bars");
         System.out.println("Datetime\t\tOpen\t\tHigh\t\tLow\t\tClose" +
-                           "\t\tNumEvents\tVolume");
+                           "\t\tNumEvents\tVolume");*/
         for (int i = 0; i < numBars; ++i) {
             Element bar = data.getValueAsElement(i);
             Datetime time = bar.getElementAsDate(TIME);

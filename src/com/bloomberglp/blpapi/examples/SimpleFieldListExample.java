@@ -140,7 +140,7 @@ public class SimpleFieldListExample {
                 Element fldInfo     = field.getElement (FIELD_INFO);
                 String  fldMnemonic = fldInfo.getElementAsString(FIELD_MNEMONIC);
                 String  fldDesc     = fldInfo.getElementAsString(FIELD_DESC);
-
+                if(fldId.startsWith("RQ"))
                 System.out.println( padString(fldId, ID_LEN) +
                                     padString(fldMnemonic, MNEMONIC_LEN) +
                                     padString(fldDesc, DESC_LEN));
@@ -162,12 +162,12 @@ public class SimpleFieldListExample {
 
     private void printHeader ()
     {
-        System.out.println( padString("FIELD ID", ID_LEN) +
+       /* System.out.println( padString("FIELD ID", ID_LEN) +
                             padString("MNEMONIC", MNEMONIC_LEN) +
                             padString("DESCRIPTION", DESC_LEN));
         System.out.println( padString("-----------", ID_LEN) +
                             padString("-----------", MNEMONIC_LEN) +
-                            padString("-----------", DESC_LEN));
+                            padString("-----------", DESC_LEN));*/
     }
 
     private static String padString(String str, int width)

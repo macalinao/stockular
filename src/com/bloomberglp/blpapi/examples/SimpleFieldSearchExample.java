@@ -55,7 +55,7 @@ public class SimpleFieldSearchExample {
         example.run(args);
 
         System.out.println("Press ENTER to quit");
-        System.in.read();
+        //System.in.read();
     }
 
     private void run(String[] args) throws Exception
@@ -92,9 +92,9 @@ public class SimpleFieldSearchExample {
 
         Service fieldInfoService = session.getService(APIFLDS_SVC);
         Request request = fieldInfoService.createRequest("FieldSearchRequest");
-        request.set ("searchSpec", "last price");
+        request.set ("searchSpec", "chief executive");
         Element exclude = request.getElement("exclude");
-        exclude.setElement ("fieldType", "Static");
+        //exclude.setElement ("fieldType", "Static");
         request.set ("returnFieldDocumentation", false);
 
         System.out.println("Sending Request: " + request);
