@@ -7,6 +7,7 @@
   "content_scripts": [{
     "css": ["highlight.min.css", "jquery.qtip.min.css"],
     "js": ["highlight.min.js", "stocks.js", "jquery.min.js", "jquery.qtip.min.js", "ext.js"],
-    "matches": ["http://*/*", "https://*/*"]
+    "matches": ["http://*/*", "https://*/*"],
+    "run_at": "document_end"
   }]
 }
