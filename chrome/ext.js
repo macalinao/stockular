@@ -2,7 +2,7 @@ function loadBloomberg() {
   var names = {};
   $(function() {
     for (var i = 0; i < stocks.length; i++) {
-      if (stocks[i].name[stocks[i].name.length - 1] !== '.') {
+      if (stocks[i].name[stocks[i].name.length - 1] === '.') {
         var name = stocks[i].name.substring(0, stocks[i].name.lastIndexOf(' '));
       } else {
         var name = stocks[i].name;
