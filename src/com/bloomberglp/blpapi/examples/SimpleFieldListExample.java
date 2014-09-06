@@ -58,7 +58,7 @@ public class SimpleFieldListExample {
 
     private void run(String[] args) throws Exception
     {
-        d_serverHost = "localhost";
+        d_serverHost = "10.8.8.1";
         d_serverPort = 8194;
 
         if (!parseCommandLine(args)) {

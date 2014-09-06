@@ -30,7 +30,7 @@ import com.bloomberglp.blpapi.Session;
 import com.bloomberglp.blpapi.SessionOptions;
 import com.bloomberglp.blpapi.Name;
 
-public class SimpleFieldSearchExample {
+public class SimpleFieldInfoExample {
 
     private static final String APIFLDS_SVC = "//blp/apiflds";
     private static final int ID_LEN         = 13;
@@ -51,51 +51,49 @@ public class SimpleFieldSearchExample {
 
     public static void main(String[] args) throws Exception
     {
-        SimpleFieldSearchExample example = new SimpleFieldSearchExample();
-        example.run(args);
+        SimpleFieldInfoExample example = new SimpleFieldInfoExample();
 
-        System.out.println("Press ENTER to quit");
-        System.in.read();
+        example.run(args);
     }
 
     private void run(String[] args) throws Exception
     {
-    d_serverHost = "localhost";
+    d_serverHost = "10.8.8.1";
     d_serverPort = 8194;
 
     if (!parseCommandLine(args)) {
         return ;
     }
 
-    SessionOptions sessionOptions = new SessionOptions();
-    try {
-        sessionOptions.setServerHost(d_serverHost);
-        sessionOptions.setServerPort(d_serverPort);
-    }
-    catch (Exception eip) {
-        // Ignoring
-    }
+        SessionOptions sessionOptions = new SessionOptions();
+        try {
+            sessionOptions.setServerHost(d_serverHost);
+            sessionOptions.setServerPort(d_serverPort);
+        }
+        catch (Exception eip) {
+            // Ignoring
+        }
 
-        System.out.println("Connecting to " + d_serverHost + ":"
-                                + d_serverPort);
+        System.out.println("Connecting to " + d_serverHost
+                                + ":" + d_serverPort);
         Session session = new Session(sessionOptions);
-        boolean sessionStarted = session.start();
-        if (!sessionStarted) {
+        if (!session.start()) {
             System.err.println("Failed to start session.");
             return;
         }
 
         if (!session.openService(APIFLDS_SVC)) {
-        System.out.println("Failed to open service: " + APIFLDS_SVC);
-        return;
+            System.out.println("Failed to open service: " + APIFLDS_SVC);
+            return;
         }
 
         Service fieldInfoService = session.getService(APIFLDS_SVC);
-        Request request = fieldInfoService.createRequest("FieldSearchRequest");
-        request.set ("searchSpec", "last price");
-        Element exclude = request.getElement("exclude");
-        exclude.setElement ("fieldType", "Static");
-        request.set ("returnFieldDocumentation", false);
+        Request request = fieldInfoService.createRequest("FieldInfoRequest");
+    request.append("id", "LAST_PRICE");
+    request.append("id", "pq005");
+    request.append("id", "zz0002");
+
+        request.set("returnFieldDocumentation", false);
 
         System.out.println("Sending Request: " + request);
         session.sendRequest(request, null);
@@ -113,8 +111,8 @@ public class SimpleFieldSearchExample {
                         continue;
                     }
 
-                    Element fields = msg.getElement(FIELD_DATA);
-                    int numElements = fields.numValues();
+            Element fields = msg.getElement(FIELD_DATA);
+            int numElements = fields.numValues();
 
                     printHeader();
                     for (int i=0; i < numElements; i++) {
@@ -126,6 +124,7 @@ public class SimpleFieldSearchExample {
             }
             catch (Exception ex) {
                 System.out.println ("Got Exception:" + ex);
+
             }
         }
     }
@@ -194,7 +193,7 @@ public class SimpleFieldSearchExample {
     {
         System.out.println("Usage:");
         System.out.println(
-         "  Retrieve field information in categorized form");
+         "  Retrieve field information in categorized form ");
         System.out.println("        [-ip <ipAddress> default = "
                                           + d_serverHost + " ]");
         System.out.println("        [-p  <tcpPort>   default = "
