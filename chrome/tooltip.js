@@ -8,6 +8,8 @@ function loadBloomberg() {
         }
       });
     });
+    console.log('b');
   });
+  console.log('a');
 }
 loadBloomberg();
