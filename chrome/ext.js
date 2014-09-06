@@ -1,13 +1,13 @@
-
-
 function loadBloomberg() {
   $(function() {
     for (var i = 0; i < stocks.length; i++) {
       $('p').highlight(stocks[i].name, {
+	caseSensitive: true,
         className: 'bloomberg'
       });
       $('p').highlight(stocks[i].symbol, {
-        className: 'bloomberg'
+        caseSensitive: true,
+	className: 'bloomberg'
       });
     }
 
