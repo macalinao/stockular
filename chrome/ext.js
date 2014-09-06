@@ -3,6 +3,9 @@ function loadBloomberg() {
   $(function() {
     for (var i = 0; i < stocks.length; i++) {
       var name = stocks[i].name;
+      if (name[name.length - 2] === ' ') {
+        name = name.substring(0, name.length - 2);
+      }
       if (name[name.length - 1] === '.' 
         || name.lastIndexOf('Co') === name.length - 2
         || name.lastIndexOf('Corp') === name.length - 4
