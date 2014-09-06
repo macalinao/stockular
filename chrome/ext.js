@@ -35,7 +35,7 @@ function loadBloomberg() {
         $('#chart-aapl').highcharts('StockChart', {
             rangeSelector : {
                 selected : 1,
-                inputEnabled: $('#container').width() > 480
+                inputEnabled: $('#chart-aapl').width() > 480
             },
             title : {
                 text : 'AAPL Stock Price'
