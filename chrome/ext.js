@@ -1,5 +1,5 @@
 function loadBloomberg() {
-  var stocks = {};
+  var myStocks = {};
   $(function() {
     for (var i = 0; i < stocks.length; i++) {
       var name = stocks[i].name;
@@ -9,7 +9,7 @@ function loadBloomberg() {
         || name.lastIndexOf('Inc') === name.length - 3) {
         name = stocks[i].name.substring(0, stocks[i].name.lastIndexOf(' '));
       }
-      stocks[name] = stocks[i];
+      myStocks[name] = stocks[i];
       $('p').highlight(name, {
         caseSensitive: true,
         className: 'bloomberg'
@@ -18,7 +18,7 @@ function loadBloomberg() {
 
     $('.bloomberg').each(function() {
       var $this = $(this);
-      var stock = stocks[$this.html()];
+      var stock = myStocks[$this.html()];
       $this.qtip({
         content: '<h3>' + stock.name + '</h3> (NYSE: ' + stock.symbol + ')'
                    + '<hr />'
