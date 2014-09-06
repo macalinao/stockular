@@ -59,7 +59,7 @@ function loadBloomberg() {
       myStocks[name] = stocks[i];
       names.push(name);
     }
-    $('p').highlight(names, {
+    $('html').highlight(names, {
       caseSensitive: true,
       className: 'bloomberg'
     });
