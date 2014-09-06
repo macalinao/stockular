@@ -25,10 +25,10 @@ function loadBloomberg() {
           '<div id="chart-' + stock.symbol.toLowerCase() + '" class="stock-chart"></div>',
           '<hr />',
           '<small>Powered by Bloomberg</small>'
-        ].join('');
+        ].join('')
       });
+    $.getJSON('http://www.highcharts.com/samples/data/jsonp.php?filename=aapl-c.json&callback=?', function (data) {
 
-      $.getJSON('http://www.highcharts.com/samples/data/jsonp.php?filename=aapl-c.json&callback=?', function(data) {
         // Create the chart
         $('#chart-aapl').highcharts('StockChart', {
           rangeSelector: {
