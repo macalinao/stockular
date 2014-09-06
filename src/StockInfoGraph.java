@@ -199,7 +199,7 @@ public class StockInfoGraph {
             request.set("gapFillInitialBar", d_gapFillInitialBar);
         }
 
-        System.out.println("Sending Request: " + request);
+        //System.out.println("Sending Request: " + request);
         session.sendRequest(request, null);
     }
 

@@ -4,22 +4,26 @@ import java.util.HashMap;
 
 
 public class StockGenerate {
-	class Container{
+	static class Container{
 		StockCompany name;
 		HashMap<String, String> values;
 		ArrayList<StockValue> graph;
+		Container(StockCompany n, HashMap<String, String> v, ArrayList<StockValue> g){
+			name = n; values = v; graph = g;
+		}
 	}
 	public static void main(String[] args)throws Exception{
 		String[] sr = new String[StockList.list.size()];
 		for(int i = 0; i<sr.length; i++)
 			sr[i] = StockList.list.get(i).symbol;
-		
-		for(StockCompany c : StockList.list){
-			StockInfoGraph graph1 = new StockInfoGraph(c.symbol, 5);
+		ArrayList<HashMap<String, String>> val = new StockInfo(sr).getValues();
+		for(int i = 0; i<sr.length; i++){
+			StockInfoGraph graph1 = new StockInfoGraph(sr[i], 5);
 			ArrayList<StockValue> g1 = graph1.getGraph();
-			PrintWriter out = new PrintWriter(StockConfig.OUTPUT + c.symbol+".json");
-			out.println(QuickJson.toJson(g1));
+			PrintWriter out = new PrintWriter(StockConfig.OUTPUT + sr[i]+".json");
+			out.println(QuickJson.toJson(new Container(StockList.list.get(i), val.get(i), g1)));
 			out.close();
+			System.out.println("Done " + sr[i]);
 		}
 	}
 }

@@ -5,7 +5,7 @@ public class StockList {
 	static{
 		list = new ArrayList<StockCompany>();
 		try{
-			Scanner file = new Scanner(new File("work/list.txt"));
+			Scanner file = new Scanner(new File("list.txt"));
 			while(file.hasNextLine()){
 				String[] sr = file.nextLine().split("\t");
 				list.add(new StockCompany(sr[0], sr[1]));
