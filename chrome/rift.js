@@ -23,17 +23,19 @@ function api(url, data, callb) {
   });
 }
 
-var stocks = ["GOOG", "AAPL", "YHOO", "T", "V", "Microsoft"];
+var stocks = ["GOOG", "AAPL", "YHOO", "T", "V", "MSFT"];
 var stdata = [];
-int stcount = 0;
+var stcount = 0;
 $(document).ready(function() {
   for(var i = 0; i<stocks.length; i++){
-    data.push(null);
+    stdata.push(null);
+    (function(){
     var a = i;
-    api(stocks[i] + ".json", null, function(dd){
-      data[a] = dd;
+    api("work/"+stocks[i] + ".json", null, function(dd){
+      stdata[a] = dd;
       stcount++;
     });
+})();
   }
 });
 
@@ -354,6 +356,8 @@ function waiting(){
         }
     }
 }
+
+waiting();
 
 
 function Text(str, x, y, z){
