@@ -28,11 +28,11 @@ var stocks = [];
 
 $(document).ready(function() {
   //api tests
-  /*api(URL + "AAPL.json", null, function(data) {
+  api(URL + "AAPL.json", null, function(data) {
     console.log(data);
-  });*/
+  });
   api(URL + "list.json", null, function(data) {
-    //console.log(data);
+    console.log(data);
     stocks = data;
     loadBloomberg();
   })
@@ -64,10 +64,7 @@ function loadBloomberg() {
       className: 'bloomberg'
     });
 
-    var counter = 0
     $('.bloomberg').each(function() {
-      counter++;
-      this.counter = counter;
       var $this = $(this);
       var stock = myStocks[$this.text()];
       this.stock = stock.symbol;
@@ -76,16 +73,26 @@ function loadBloomberg() {
         stock.detailedOnce = true;
       }
 
-      $this.popover({
-        animation: true,
-        content: "<span id='popbody"+counter+"' ></span>",
-        html: true,
-        placement: "bottom",
-        trigger: "hover",
-        title: "<span id='poptitle"+counter+"' >" +stock.name + " (" + stock.symbol +")</span>"
+      api(URL + stock.symbol + ".json", null, function(data) {
+        var popoverContent = $('<div class="popover-content"><div id="container2" style="height: 250px; width:260px"></div></div>');
+
+        var leftData = $('<div class="col"><ul></ul></div>');
+        leftData.append('<li><strong>Market cap:</strong> $' + (data.values.CUR_MKT_CAP / 1000000).toFixed(2) + ' million</li>');
+        leftData.append('<li><strong>P/E Ratio:</strong> ' + data.values.PE_RATIO + '</li>');
+        popoverContent.append(leftData);
+
+        $this.popover({
+          animation: true,
+          content: popoverContent.html(),
+          html: true,
+          placement: "top",
+          trigger: "none",
+          title: stock.name + " (" +stock.symbol + ")"
+        });
+
+        $this.hover(popshow);
       });
 
-      $this.hover(popshow);
     });
     $(document).mousemove(updateBoxes);
   });
@@ -125,7 +132,7 @@ function popshow(){
   $this.unbind('mouseenter mouseleave');
   $this.popover('show');
   var bd = $("#popbody"+this.counter);
-  bd.html('<div id="container2" style="height: 250px; width:260px"></div>');
+  bd.html('');
 
 
 }
@@ -146,30 +153,11 @@ function updateBoxes(ev) {
     if (ev.pageX < left || ev.pageY < top || ev.pageX > left + ow || ev.pageY > top + oh) {
       $('.bloomberg').popover('hide');
       $('.bloomberg').unbind('mouseenter mouseleave');
-      $('.bloomberg').hover(popshow);
+      $('.bloomberg').hover(function() {
+        $(this).popover('show');
+        $(this).unbind('mouseenter mouseleave');
+      });
     }
   });
 }
 
-var aapl = null;
-
-function fake(data) {
-  console.log(data)
-  // Create the chart
-  $('#chart-aapl').highcharts('StockChart', {
-    rangeSelector: {
-      selected: 1,
-      inputEnabled: $('#chart-aapl').width() > 480
-    },
-    title: {
-      text: 'AAPL Stock Price'
-    },
-    series: [{
-      name: 'AAPL',
-      data: data,
-      tooltip: {
-        valueDecimals: 2
-      }
-    }]
-  });
-}

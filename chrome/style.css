@@ -2,7 +2,6 @@
   color: #CF5300;
 }
 
-
 .stock-chart {
   width: 100%;
 }
@@ -13,7 +12,6 @@
   left: 0;
   z-index: 1060;
   display: none;
-  max-width: 276px;
   padding: 1px;
   text-align: left;
   white-space: normal;
@@ -135,4 +133,8 @@
 }
 .fade.in {
   opacity: 1;
+}
+
+.popover-content {
+  width: 600px;
 }
