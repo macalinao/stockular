@@ -45,6 +45,7 @@ $(document).ready(function() {
 
 
 var myStocks = {};
+
 function loadBloomberg() {
   $(function() {
     var names = [];
@@ -123,46 +124,44 @@ function loadBloomberg() {
         $(this).unbind('mouseenter mouseleave');
       });
     });
-
+    $(document).mousemove(updateBoxes);
   });
-  $(document).mousemove(updateBoxes);
-});
 }
 
-function popshow(){
-  api(URL + this.stock+".json", null, function(data) {
+function popshow() {
+  api(URL + this.stock + ".json", null, function(data) {
     console.log(data);
 
     var gdata = [];
     var g = data.graph;
-    for(var  i = 0; i<g.length; i++)
+    for (var i = 0; i < g.length; i++)
       gdata.push([g[i].date, g[i].value]);
     console.log(gdata);
     $('#container2').highcharts('StockChart', {
 
-            rangeSelector: {
-                inputEnabled: $('#container').width() > 480,
-                selected: 1
-            },
+      rangeSelector: {
+        inputEnabled: $('#container').width() > 480,
+        selected: 1
+      },
 
-            title: {
-                text: data.name.symbol + ' Stock'
-            },
+      title: {
+        text: data.name.symbol + ' Stock'
+      },
 
-            series: [{
-                name: data.name.symbol,
-                data: gdata,
-                type: 'spline',
-                tooltip: {
-                    valueDecimals: 2
-                }
-            }]
-        });
+      series: [{
+        name: data.name.symbol,
+        data: gdata,
+        type: 'spline',
+        tooltip: {
+          valueDecimals: 2
+        }
+      }]
+    });
   });
   $this = $(this);
   $this.unbind('mouseenter mouseleave');
   $this.popover('show');
-  var bd = $("#popbody"+this.counter);
+  var bd = $("#popbody" + this.counter);
   bd.html('');
 
 
