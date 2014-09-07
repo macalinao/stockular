@@ -48,54 +48,57 @@ var myStocks = {};
 function loadBloomberg() {
   $(function() {
     var names = [];
-    for (var i = 0; i < stocks.length; i++) {
-      var name = stocks[i].name;
-      if (name[name.length - 2] === ' ') {
-        name = name.substring(0, name.length - 2);
-      }
-      if (name[name.length - 1] === '.' || name.lastIndexOf('Co') === name.length - 2 || name.lastIndexOf('Corp') === name.length - 4 || name.lastIndexOf('Inc') === name.length - 3) {
-        name = stocks[i].name.substring(0, stocks[i].name.lastIndexOf(' '));
-      }
-      myStocks[name] = stocks[i];
-      names.push(name);
+  for (var i = 0; i < stocks.length; i++) {
+    var name = stocks[i].name;
+    if (name[name.length - 2] === ' ') {
+      name = name.substring(0, name.length - 2);
     }
-    $('p').highlight(names, {
-      caseSensitive: true,
-      className: 'bloomberg'
-    });
+    if (name[name.length - 1] === '.' || name.lastIndexOf('Co') === name.length - 2 || name.lastIndexOf('Corp') === name.length - 4 || name.lastIndexOf('Inc') === name.length - 3) {
+      name = stocks[i].name.substring(0, stocks[i].name.lastIndexOf(' '));
+    }
+    myStocks[name] = stocks[i];
+    names.push(name);
+  }
+  $('p').highlight(names, {
+    caseSensitive: true,
+    className: 'bloomberg'
+  });
 
-    $('.bloomberg').each(function() {
-      var $this = $(this);
-      var stock = myStocks[$this.text()];
-      this.stock = stock.symbol;
-      if (!stock.detailedOnce) {
-        $this.html('<strong>' + $this.html() + '</strong>').append(' (NYSE: ' + stock.symbol + ')');
-        stock.detailedOnce = true;
-      }
 
-      api(URL + stock.symbol + ".json", null, function(data) {
-        var popoverContent = $('<div class="popover-content"><div id="container2" style="height: 250px; width:260px"></div></div>');
+  $('.bloomberg').each(function() {
+    var $this = $(this);
+    var stock = myStocks[$this.html()];
+    if (!stock.detailedOnce) {
+      $this.html('<strong>' + $this.html() + '</strong>').append(' (NYSE: ' + stock.symbol + ')');
+      stock.detailedOnce = true;
+    }
 
-        var leftData = $('<div class="col"><ul></ul></div>');
-        leftData.append('<li><strong>Market cap:</strong> $' + (data.values.CUR_MKT_CAP / 1000000).toFixed(2) + ' million</li>');
-        leftData.append('<li><strong>P/E Ratio:</strong> ' + data.values.PE_RATIO + '</li>');
-        popoverContent.append(leftData);
+    api(URL + stock.symbol + ".json", null, function(data) {
+      var popoverContent = $('<div class="popover-content"></div>');
 
-        $this.popover({
-          animation: true,
-          content: popoverContent.html(),
-          html: true,
-          placement: "top",
-          trigger: "none",
-          title: stock.name + " (" +stock.symbol + ")"
-        });
+      var leftData = $('<div class="col"><ul></ul></div>');
+      leftData.append('<li><strong>Market cap:</strong> $' + (data.values.CUR_MKT_CAP / 1000000).toFixed(2) + ' million</li>');
+      leftData.append('<li><strong>P/E Ratio:</strong> ' + data.values.PE_RATIO + '</li>');
+      popoverContent.append(leftData);
 
-        $this.hover(popshow);
+      $this.popover({
+        animation: true,
+        content: popoverContent.html(),
+        html: true,
+        placement: "top",
+        trigger: "hover",
+        title: '(NYSE:<strong> ' + stock.symbol + '</strong>)'
       });
 
+      $this.hover(function() {
+        $(this).popover('show');
+        $(this).unbind('mouseenter mouseleave');
+      });
     });
-    $(document).mousemove(updateBoxes);
+
   });
+  $(document).mousemove(updateBoxes);
+});
 }
 
 function popshow(){
@@ -140,24 +143,24 @@ function popshow(){
 var percent = 0.2;
 
 function updateBoxes(ev) {
-  $(".popover").each(function(k, b) {
-    b = $(b)
-    var ow = b.outerWidth();
-    var oh = b.outerHeight() + 30;
-    var off = b.offset();
-    var top = off.top - oh * percent;
-    var left = off.left - ow * percent;
-    ow *= 1 + percent * 2;
-    oh *= 1 + percent * 2;
-    //console.log((ev.pageX < left)+ " " +( ev.pageY < top )+ " " +( ev.pageX > left+ow )+ " " +( ev.pageY > top + oh));
-    if (ev.pageX < left || ev.pageY < top || ev.pageX > left + ow || ev.pageY > top + oh) {
-      $('.bloomberg').popover('hide');
-      $('.bloomberg').unbind('mouseenter mouseleave');
-      $('.bloomberg').hover(function() {
-        $(this).popover('show');
-        $(this).unbind('mouseenter mouseleave');
-      });
-    }
-  });
+$(".popover").each(function(k, b) {
+  b = $(b)
+  var ow = b.outerWidth();
+  var oh = b.outerHeight() + 30;
+  var off = b.offset();
+  var top = off.top - oh * percent;
+  var left = off.left - ow * percent;
+  ow *= 1 + percent * 2;
+  oh *= 1 + percent * 2;
+  //console.log((ev.pageX < left)+ " " +( ev.pageY < top )+ " " +( ev.pageX > left+ow )+ " " +( ev.pageY > top + oh));
+  if (ev.pageX < left || ev.pageY < top || ev.pageX > left + ow || ev.pageY > top + oh) {
+    $('.bloomberg').popover('hide');
+    $('.bloomberg').unbind('mouseenter mouseleave');
+    $('.bloomberg').hover(function() {
+      $(this).popover('show');
+      $(this).unbind('mouseenter mouseleave');
+    });
+  }
+});
 }
 
