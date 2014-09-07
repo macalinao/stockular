@@ -2,7 +2,6 @@
   color: #CF5300;
 }
 
-
 .stock-chart {
   width: 100%;
 }
@@ -135,4 +134,8 @@
 }
 .fade.in {
   opacity: 1;
+}
+
+.popover-content {
+  width: 600px;
 }
