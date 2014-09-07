@@ -72,7 +72,6 @@ function loadBloomberg() {
         stock.detailedOnce = true;
       }
 
-
       var popover = $this.popover({
         animation: true,
         content: 'placeholder',
