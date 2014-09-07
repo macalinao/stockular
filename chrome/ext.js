@@ -24,6 +24,7 @@ function api(url, data, callb) {
 }
 
 var stocks = [];
+var usaTODAY;
 
 $(document).ready(function() {
   //api tests
@@ -31,6 +32,10 @@ $(document).ready(function() {
     stocks = data;
     loadBloomberg();
   })
+     $.getJSON('http://api.usatoday.com/open/articles/topnews/money?count=3&days=0&page=0&encoding=json&api_key=mfp848fncedqnnfzhc2drx3y', function( data ) {
+         usaTODAY = data;
+        
+          });
 });
 
 
@@ -109,6 +114,13 @@ function loadBloomberg() {
         '</td></tr></table>'
       ].join(''));
       overviewContent.append(divdata);
+      setTimeout(function() {
+        overviewContent.append('<h6> From USA Today </h6>')
+         $.each (usaTODAY.stories, function (key, val) {
+            overviewContent.append(
+              "<li class='usaToday' id='" + key + "'><a href='" + val.guid[0].value + "'>" + val.description.substring(0, Math.min(70, val.description.length - 1)) + "..." + "</a></li>");
+          });
+      }, 1000);
 
       var liveviewContent = $('<div class="liveviewContent"></div>').append('<div class="graph" id="live' + abc.counter + '"></div>');
       var divdata2 = $('<div></div>');
