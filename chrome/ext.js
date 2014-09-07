@@ -122,6 +122,7 @@ function loadBloomberg() {
       ].join(''));
       livewviewContent.append(divdata2);
 
+      var rand = Math.floor(Math.random() * 100);
       $this.popover({
         animation: true,
         content: livewviewContent.html(),
@@ -129,9 +130,15 @@ function loadBloomberg() {
         placement: "bottom",
         trigger: "none",
         title: '<div class="btn-group"><button type="button" class="btn btn-default">Overview</button>'+
-        '<button type="button" class="btn btn-default">Live View</button><button type="button" class="btn btn-default" onclick="chrome.runtime.sendMessage({rift: true})">Rift View</button></div>' 
+        '<button type="button" class="btn btn-default">Live View</button><button type="button" class="btn btn-default" id="riftView' + rand + '">Rift View</button></div>' 
       });
 
+      $this.on('show.bs.popover', function() {
+        $('#riftView' + rand).click(function() {
+          chrome.runtime.sendMessage({rift: true});
+        });
+      });
+ 
       abc.titleHtml =         '<b>'+stock.symbol + ' '+close +'</b>' + 
         '<span style="color:'+(netChange > 0 ? 'green"> +':'red"> ')+ netChange + ' ('+percentChange+'%)</span>';
 
