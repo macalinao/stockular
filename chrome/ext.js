@@ -76,7 +76,7 @@ function loadBloomberg() {
       var popoverContent = $('<div class="popover-content"></div>');
 
       var leftData = $('<div class="col"><ul></ul></div>');
-      leftData.append('<li><strong>Market cap:</strong> $' + (data.values.CUR_MKT_CAP / 1000000).toFixed(2) + ' million</li>');
+      leftData.append('<li><strong>Market cap:</strong> $' + numberWithCommas((data.values.CUR_MKT_CAP / 1000000).toFixed(2)) + ' million</li>');
       leftData.append('<li><strong>P/E Ratio:</strong> ' + data.values.PE_RATIO + '</li>');
       popoverContent.append(leftData);
 
@@ -146,3 +146,8 @@ $('#chart-aapl').highcharts('StockChart', {
     }]
   });
 }
+
+function numberWithCommas(x) {
+      return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
+
