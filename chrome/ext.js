@@ -83,7 +83,7 @@ function loadBloomberg() {
     var abc = this;
 
     api(URL + stock.symbol + ".json", null, function(data) {
-      var popoverContent = $('<div class="popover-content"><div class="graph" id="graph'+abc.counter+'"></div></div>');
+      var overviewContent = $('<div class="popover-content"><div class="graph" id="graph'+abc.counter+'"></div></div>');
 
       var volume = formatNumber(data.values.VOLUME_AVG_30D);
       var open = formatNumber(data.values.PX_OPEN);
@@ -97,6 +97,7 @@ function loadBloomberg() {
       var divYield = formatNumber(data.values.DIVIDEND_YIELD);
       var netChange = formatNumber(data.values.CHG_NET_1D);
       var percentChange = formatNumber(data.values.CHG_PCT_1D);
+      var eps = formatNumber(data.values.TRAIL_12M_EPS);
 
       var divdata = $('<div></div>');
       divdata.append([
@@ -107,20 +108,28 @@ function loadBloomberg() {
         '<td><b>52 Week:</b> ' + ylow +' - ' + yhigh+'</tr>',
         '</td></tr></table>'
       ].join(''));
-      popoverContent.append(divdata);
+      overviewContent.append(divdata);
 
-      var rightData = $('<div class="col"><ul></ul></div>');
-      rightData.append('<li><strong>Market cap:</strong> $' + numberWithCommas((data.values.CUR_MKT_CAP / 1000000).toFixed(2)) + ' million</li>');
-      rightData.append('<li><strong>P/E Ratio:</strong> ' + data.values.PE_RATIO + '</li>');
+      var livewviewContent = $('<div class="popover-content"><div class="graph" id="live'+abc.counter+'"></div></div>');
+      var divdata2 = $('<div></div>');
+      divdata2.append([
+        '<table class="table table-bordered">',
+        '<tr><td><b>Volume:</b> ' + volume +'</td>',
+        '<td><b>Market Cap:</b> ' + mktCap +'</td></tr>',
+        '<tr><td><b>P/E Ratio:</b> ' + peRatio+'</td>',
+        '<td><b>EPS:</b> ' + eps+'</tr>',
+        '</td></tr></table>'
+      ].join(''));
+      livewviewContent.append(divdata2);
 
       $this.popover({
         animation: true,
-        content: popoverContent.html(),
+        content: livewviewContent.html(),
         html: true,
         placement: "bottom",
         trigger: "none",
-        title: '<div class="btn-group"><button type="button" class="btn btn-default">Left</button>'+
-        '<button type="button" class="btn btn-default">Middle</button><button type="button" class="btn btn-default">Right</button></div>' 
+        title: '<div class="btn-group"><button type="button" class="btn btn-default">Overview</button>'+
+        '<button type="button" class="btn btn-default">Live View</button><button type="button" class="btn btn-default">Rift View</button></div>' 
       });
 
       abc.titleHtml =         '<b>'+stock.symbol + ' '+close +'</b>' + 
@@ -194,7 +203,8 @@ function updateBoxes(ev) {
 //pls use this, thank you
 function formatNumber(x){
   x = parseFloat(x);
-  if( x > 1e6) return (x / 1e6).toFixed(2) + "M";
+  if( x > 1e9) return numberWithCommas((x / 1e9).toFixed(2)) + "B";
+  if( x > 1e6) return numberWithCommas((x / 1e6).toFixed(2)) + "M";
   return numberWithCommas(x.toFixed(2))
 }
 
