@@ -63,6 +63,8 @@ public class StockInfoGraphLive {
         	date.add(Calendar.DAY_OF_MONTH, -1);
         }
         date.set(Calendar.HOUR, 10);
+        if( date.get(Calendar.MINUTE) == 0 )
+        	date.set(Calendar.MINUTE, 1);
         return date;
     }
 

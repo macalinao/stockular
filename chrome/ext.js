@@ -187,7 +187,7 @@ function show_Live(stock, num, openn) {
                 }
             },
             title: {
-                text: 'Graph'
+                text: 'Realtime '+ stock.symbol
             },
             xAxis: {
                 type: 'datetime',
@@ -195,7 +195,7 @@ function show_Live(stock, num, openn) {
             },
             yAxis: {
                 title: {
-                    text: 'Value'
+                    text: "Price"
                 },
                 plotLines: [{
                     value: 0,
@@ -217,7 +217,7 @@ function show_Live(stock, num, openn) {
                 enabled: false
             },
             series: [{
-                name: 'Value',
+                name: stock.symbol,
                 data: (function() {
                                     // generate an array of random data
                                     var data = []
