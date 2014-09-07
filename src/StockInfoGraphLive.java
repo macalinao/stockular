@@ -41,7 +41,7 @@ public class StockInfoGraphLive {
     private String endDateTime;
     private String stock;
     private String security;
-
+    private double value;
     public static void main(String[] args) throws Exception {
         StockInfoGraphLive example = new StockInfoGraphLive("AAPL", 1);
         example.run();
@@ -59,6 +59,7 @@ public class StockInfoGraphLive {
         else if (date.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY) {
         	date.add(Calendar.DAY_OF_MONTH, -1);
         }
+        date.set(Calendar.HOUR, 10);
         return date;
     }
 
@@ -133,11 +134,11 @@ public class StockInfoGraphLive {
                 cc = item.getElementAsString(COND_CODE);
             }
 
-            System.out.println((time.calendar().getTime()) + "\t" +
+            /*System.out.println((time.calendar().getTime()) + "\t" +
                     type + "\t" +
                     (value) + "\t\t" +
                     (size) + "\t" +
-                    cc);
+                    cc);*/
         }
     }
 
@@ -168,7 +169,7 @@ public class StockInfoGraphLive {
             Datetime prevTradeDateTime = new Datetime(calendar);
 
             // set the end date for next day
-            calendar.roll(Calendar.MINUTE, -5);
+            calendar.roll(Calendar.SECOND, -3);
             Datetime startDateTime = new Datetime(calendar);
 
             request.set("startDateTime", startDateTime);

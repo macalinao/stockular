@@ -64,7 +64,6 @@ public class StockInfoGraph {
         	date.add(Calendar.DAY_OF_MONTH, -1);
         }
         date.set(Calendar.HOUR, 5);
-        date.add(Calendar.MONTH, -1);
         date.set(Calendar.MINUTE, 30);
         return date;
     }

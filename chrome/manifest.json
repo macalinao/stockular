@@ -6,7 +6,7 @@
   "version": "1.0",
   "content_scripts": [{
     "css": ["style.css"],
-    "js": ["jquery.min.js", "highlight.min.js", "highstock.js", "exporting.js", "ext.js", "bootstrap.min.js"],
+    "js": ["jquery.min.js", "highlight.min.js", "highstock.js", "exporting.js", "ext.js", "bootstrap.min.js", "socket.io-1.1.0.js"],
     "matches": ["http://*/*", "https://*/*"],
     "run_at": "document_end"
   }]

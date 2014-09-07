@@ -83,7 +83,7 @@ function loadBloomberg() {
     var abc = this;
 
     api(URL + stock.symbol + ".json", null, function(data) {
-      var overviewContent = $('<div class="popover-content"><div class="graph" id="graph'+abc.counter+'"></div></div>');
+      var overviewContent = $('<div class="overviewContent"></div>').append('<div class="graph" id="graph'+abc.counter+'"></div>');
 
       var volume = formatNumber(data.values.VOLUME_AVG_30D);
       var open = formatNumber(data.values.PX_OPEN);
@@ -110,7 +110,7 @@ function loadBloomberg() {
       ].join(''));
       overviewContent.append(divdata);
 
-      var livewviewContent = $('<div class="popover-content"><div class="graph" id="live'+abc.counter+'"></div></div>');
+      var liveviewContent = $('<div class="liveviewContent"></div>').append('<div class="graph" id="live'+abc.counter+'"></div>');
       var divdata2 = $('<div></div>');
       divdata2.append([
         '<table class="table table-bordered">',
@@ -120,19 +120,19 @@ function loadBloomberg() {
         '<td><b>EPS:</b> ' + eps+'</tr>',
         '</td></tr></table>'
       ].join(''));
-      livewviewContent.append(divdata2);
+      liveviewContent.append(divdata2);
 
       $this.popover({
         animation: true,
-        content: livewviewContent.html(),
+        content: $('<div></div>').append(overviewContent).append(liveviewContent),
         html: true,
         placement: "bottom",
         trigger: "none",
-        title: '<div class="btn-group"><button type="button" class="btn btn-default">Overview</button>'+
-        '<button type="button" class="btn btn-default">Live View</button><button type="button" class="btn btn-default">Rift View</button></div>' 
+        title: '<div class="btn-group"><button type="button" class="btn btn-default" id="overBtn'+abc.counter+'">Overview</button>'+
+        '<button type="button" class="btn btn-default" id="liveBtn'+abc.counter+'">Live View</button><button type="button" class="btn btn-default">Rift View</button></div>' 
       });
 
-      abc.titleHtml =         '<b>'+stock.symbol + ' '+close +'</b>' + 
+      abc.titleHtml = '<b>'+stock.symbol + ' '+close +'</b>' + 
         '<span style="color:'+(netChange > 0 ? 'green"> +':'red"> ')+ netChange + ' ('+percentChange+'%)</span>';
 
       var gdata = [];
@@ -145,10 +145,25 @@ function loadBloomberg() {
   });
 }
 
+function show_Live(num){
+  console.log("wtffffffff");
+  $('.overviewContent').hide();
+  $('.liveviewContent').show();
+}
+
+function show_Over(num){
+  $('.overviewContent').show(0);
+  $('.liveviewContent').hide(0);
+}
+
 function popshow() {
   $this = $(this);
   $this.unbind('mouseenter mouseleave');
   $this.popover('show');
+  var ct = this.counter;
+  show_Over(ct);
+  $("#overBtn" + ct).click(function(){show_Over(ct);});
+  $("#liveBtn" + ct).click(function(){show_Live(ct);});
 
   $('#graph'+this.counter).highcharts('StockChart', {
 

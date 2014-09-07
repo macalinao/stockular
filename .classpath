@@ -41,5 +41,6 @@
 	<classpathentry kind="lib" path="lib/UserEntitlementsExample-3.8.5.1.jar"/>
 	<classpathentry kind="lib" path="lib/UserModeExample-3.8.5.1.jar"/>
 	<classpathentry kind="lib" path="lib/gson-2.2.4.jar"/>
+	<classpathentry kind="lib" path="lib/socketio.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
