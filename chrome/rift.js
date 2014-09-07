@@ -325,8 +325,6 @@ function Card(data, scene, rotx, roty, dx, dy, dz){
   this.data = data;
   scene.add(getLine(-size,-size, -size,size,rotx,roty, dx, dy, dz));
   scene.add(getLine(-size,-size, size,-size,rotx,roty, dx, dy, dz));
-  scene.add(getLine(-size,-size, -size,size,rotx,roty, dx, dy, dz));
-  scene.add(getLine(-size,-size, size,-size,rotx,roty, dx, dy, dz));
   var x = [], y = [], g = data.graph;
   for(var i = 0; i<g.length; i++){
     x.push(g[i].date);
@@ -336,12 +334,14 @@ function Card(data, scene, rotx, roty, dx, dy, dz){
   nlize(y);
   for(var i = 1; i<g.length; i++){
     scene.add(getLine(size*2*x[i-1]-size, size*1.6*y[i-1]-size*0.8, size*2*x[i]-size, size*1.6*y[i]-size*0.8, rotx,roty, dx, dy, dz));
+
   }
   scene.add(Text(data.name.name + " ("+data.name.symbol+")", dx,dy+size+10,dz-5));
   var vals = [data.values.PX_OPEN, data.values.PX_CLOSE, data.values.CHG_PCT_1D, data.values.PX_LOW, data.values.PX_HIGH, data.values.CUR_MKT_CAP, data.values.VOLUME_AVG_30D];
   var names =["Open", "Close", "% Change", "Low", "High", "Market Cap", "Volume"];
   for(var i = 0; i<vals.length; i++)
     scene.add(Text(names[i]+": " +formatNumber(vals[i]), dx,-size-30-i*16,dz-5));
+  anim += 5000;
 }
 
 Card(stdata[0], scene, 0, 0,size*3,0,0);
@@ -367,7 +367,39 @@ function Text(str, x, y, z){
           new THREE.PlaneGeometry(120, 16), new THREE.MeshBasicMaterial({ map: texture }));
   
   plane.position.set(x, y, z);
+  animate(plane);
   return plane;
+}
+
+
+var anim = 4000;
+function animate(obj){
+
+  this.obj = obj;
+  var done = false;
+
+  var pos = { x:obj.position.x+(Math.random()<0.5?1:-1)*(50+100*Math.random()),
+          y:obj.position.y+(Math.random()<0.5?1:-1)*(50+100*Math.random()), 
+          z:obj.position.z+20+20*Math.random(),
+          rotx: -3-(Math.random()*3),
+          roty: -3-(Math.random()*3)};
+  var end = { x:obj.position.x, y:obj.position.y, z:obj.position.z,rotx:0, roty:0 };
+  
+  this.tween = new TWEEN.Tween(pos).to(end, 5000);
+  this.tween.easing(TWEEN.Easing.Elastic.Out);
+  this.tween.delay(10*1000+Math.random()*3000);
+  
+  var updating = function(){
+    obj.position.x  = pos.x;
+    obj.position.y = pos.y;
+    obj.position.z = pos.z
+    obj.rotation.x = pos.rotx;
+    obj.rotation.y = pos.roty;
+  };
+  
+  this.tween.onUpdate(updating);
+  this.tween.start();
+  updating();
 }
 
 function nlize(ar){
@@ -400,6 +432,7 @@ function getPlane(x, y, wid, len, rotx, roty, rotz, dx, dy, dz){
          geo, new THREE.MeshLambertMaterial({color: 0x00aaff}));
   plane.position.x = x;
   plane.position.y = y;
+  animate(plane);
   return plane;
 }
 
@@ -418,7 +451,7 @@ function render(t) {
         //rift.rotation.y += 0.01;
     }
 
-
+    TWEEN.update();
 
     if (vrMode) {
         // Render left eye
