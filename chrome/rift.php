@@ -76,9 +76,17 @@
         <li>LinearAcceleration: <span id="linearAcceleration">--</span></li>
       </ul>
     </section>
+
+    <?php
+$abc = $_REQUEST['stock'];
+if( $abc)
+  echo '<script>var req = "'.$abc.'";</script>';
+else echo '<script>var req = "null";</script>';
+?>
     <script src="jquery.min.js"></script>
     <script src="js/three.min.js"></script>
     <script src="tween.min.js"></script>
     <script src="rift.js"></script>
+
   </body>
 </html>

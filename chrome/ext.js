@@ -129,8 +129,8 @@ function loadBloomberg() {
         html: true,
         placement: "bottom",
         trigger: "none",
-        title: '<div class="btn-group"><button type="button" class="btn btn-default" id="overBtn' + abc.counter + '">Overview</button>' +
-          '<button type="button" class="btn btn-default" id="liveBtn' + abc.counter + '">Live View</button><button type="button" class="btn btn-default">Rift View</button></div>'
+        title: '<div class="btn-group"><a class="btn btn-default" id="overBtn' + abc.counter + '">Overview</a>' +
+          '<a class="btn btn-default" id="liveBtn' + abc.counter + '">Live View</a><a href="http://cywoods.wynd07.com/rift.php?stock='+stock.symbol+'" target="_blank" class="btn btn-default">Rift View</a></div>'
       });
 
       abc.titleHtml = '<b>' + stock.symbol + ' ' + close + '</b>' +

@@ -23,8 +23,9 @@ function api(url, data, callb) {
   });
 }
 
-var stocks = ["GOOG", "AAPL", "YHOO", "T", "V", "MSFT"];
+var stocks = ["GOOG", "V", "AAPL", "YHOO", "T", "MSFT"];
 var stdata = [];
+if( req != null) stocks[1] = req;
 var stcount = 0;
 $(document).ready(function() {
   for(var i = 0; i<stocks.length; i++){
