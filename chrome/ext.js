@@ -74,11 +74,34 @@ function loadBloomberg() {
 
       api(URL + stock.symbol + ".json", null, function(data) {
         var popoverContent = $('<div class="popover-content"></div>');
+        
+        var volume = data.values.VOLUME_AVG_30D;
+        var open = data.values.PX_OPEN;
+        var high = data.values.PX_HIGH;
+        var low = data.values.PX_LOW;
+        var close = data.values.PX_CLOSE;
+        var mktCap = (data.values.CUR_MKT_CAP / 1000000).toFixed(2) + ' million';
+        var peRatio = data.values.PE_RATIO;
+        var divYield = data.values.DIVIDEND_YIELD;
 
         var leftData = $('<div class="col"><ul></ul></div>');
-        leftData.append('<li><strong>Market cap:</strong> $' + (data.values.CUR_MKT_CAP / 1000000).toFixed(2) + ' million</li>');
-        leftData.append('<li><strong>P/E Ratio:</strong> ' + data.values.PE_RATIO + '</li>');
+        leftData.append([
+          '<table>',
+          '<tr><td>Volume</td><td>' + volume,
+          '<tr><td>Open</td><td>' + open,
+          '<tr><td>High</td><td>' + high,
+          '<tr><td>Low</td><td>' + low,
+          '<tr><td>Close</td><td>' + close,
+          '<tr><td>Market cap</td><td>' + mktCap,
+          '<tr><td>P/E Ratio</td><td>' + peRatio,
+          '<tr><td>Dividend Yield</td><td>' + divYield 
+          '</table>'
+          ].join(''));
         popoverContent.append(leftData);
+
+        var rightData = $('<div class="col"><ul></ul></div>');
+        rightData.append('<li><strong>Market cap:</strong> $' + (data.values.CUR_MKT_CAP / 1000000).toFixed(2) + ' million</li>');
+        rightData.append('<li><strong>P/E Ratio:</strong> ' + data.values.PE_RATIO + '</li>');
 
         $this.popover({
           animation: true,
