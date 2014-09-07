@@ -72,27 +72,25 @@ function loadBloomberg() {
         stock.detailedOnce = true;
       }
 
-      var popover = $this.popover({
-        animation: true,
-        content: 'placeholder',
-        html: true,
-        placement: "top",
-        trigger: "hover",
-        title: "bitch pls"
-      });
-
-      $this.hover(function() {
-        $(this).popover('show');
-        $(this).unbind('mouseenter mouseleave');
-      });
-
       api(URL + stock.symbol + ".json", null, function(data) {
         console.log(data);
         var leftData = $('<div class="col"></div>');
         leftData.append('<strong>Market cap:</strong> $' + (data.values.CUR_MKT_CAP / 1000000).toFixed(2) + ' million');
         leftData.append('<strong>P/E Ratio:</strong> ' + data.values.PE_RATIO);
-        console.log(popover);
-        popover.html(leftData.html());
+
+        $this.popover({
+          animation: true,
+          content: leftData.html(),
+          html: true,
+          placement: "top",
+          trigger: "hover",
+          title: "bitch pls"
+        });
+
+        $this.hover(function() {
+          $(this).popover('show');
+          $(this).unbind('mouseenter mouseleave');
+        });
       });
 
     });
