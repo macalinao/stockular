@@ -135,6 +135,10 @@
   opacity: 1;
 }
 
+.col {
+  float: left;
+}
+
 .popover-content {
   width: 600px;
 }
