@@ -129,7 +129,7 @@ function loadBloomberg() {
         placement: "bottom",
         trigger: "none",
         title: '<div class="btn-group"><button type="button" class="btn btn-default">Overview</button>'+
-        '<button type="button" class="btn btn-default">Live View</button><button type="button" class="btn btn-default rift-view">Rift View</button></div>' 
+        '<button type="button" class="btn btn-default">Live View</button><button type="button" class="btn btn-default" onclick="chrome.tabs.create({url: \'rift.html\'})">Rift View</button></div>' 
       });
 
       abc.titleHtml =         '<b>'+stock.symbol + ' '+close +'</b>' + 
@@ -144,9 +144,6 @@ function loadBloomberg() {
     });
   });
 
-  $('.rift-view').click(function() {
-    chrome.tabs.create({url: 'rift.html'});
-  });
 }
 
 function popshow() {
