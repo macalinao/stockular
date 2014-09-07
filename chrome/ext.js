@@ -94,7 +94,7 @@ function loadBloomberg() {
           '<tr><td>Close</td><td>' + close,
           '<tr><td>Market cap</td><td>' + mktCap,
           '<tr><td>P/E Ratio</td><td>' + peRatio,
-          '<tr><td>Dividend Yield</td><td>' + divYield '</table>'
+          '<tr><td>Dividend Yield</td><td>' + divYield +'</table>'
         ].join(''));
         popoverContent.append(leftData);
 
