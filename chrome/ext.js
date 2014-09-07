@@ -94,12 +94,39 @@ function loadBloomberg() {
 function popshow(){
   api(URL + this.stock+".json", null, function(data) {
     console.log(data);
+
+    var data = [];
+    var g = data.graph;
+    for(var  i = 0; i<g.length; i++)
+      data.push([g[i].date][g[i].value]);
+    $('#container').highcharts('StockChart', {
+
+            rangeSelector: {
+                inputEnabled: $('#container').width() > 480,
+                selected: 1
+            },
+
+            title: {
+                text: 'AAPL Stock Price'
+            },
+
+            series: [{
+                name: 'AAPL Stock Price',
+                data: data,
+                type: 'spline',
+                tooltip: {
+                    valueDecimals: 2
+                }
+            }]
+        });
   });
   $this = $(this);
   $this.unbind('mouseenter mouseleave');
   $this.popover('show');
   var bd = $("#popbody"+this.counter);
   bd.html('<div id="container" style="height: 400px"></div>');
+
+
 }
 
 var percent = 0.2;
