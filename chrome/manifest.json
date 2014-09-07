@@ -9,5 +9,11 @@
     "js": ["jquery.min.js", "highlight.min.js", "highstock.js", "exporting.js", "ext.js", "bootstrap.min.js", "socket.io-1.1.0.js"],
     "matches": ["http://*/*", "https://*/*"],
     "run_at": "document_end"
-  }]
+  }],
+  "permissions": [
+    "tabs"
+  ],
+  "background": {
+    "scripts": ["background.js"]
+  }
 }

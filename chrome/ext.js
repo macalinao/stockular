@@ -122,6 +122,7 @@ function loadBloomberg() {
       ].join(''));
       liveviewContent.append(divdata2);
 
+      var rand = Math.floor(Math.random() * 100);
       $this.popover({
         animation: true,
         content: $('<div></div>').append(overviewContent).append(liveviewContent),
@@ -143,6 +144,7 @@ function loadBloomberg() {
 
     });
   });
+
 }
 
 function show_Live(num){
