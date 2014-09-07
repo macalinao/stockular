@@ -64,15 +64,47 @@ function loadBloomberg() {
 
     $('.bloomberg').each(function() {
       var $this = $(this);
-      $this.popover({
+      var pop = $this.popover({
         animation:true, 
         content:"yes", 
         html: true, 
         placement:"top", 
-        trigger:"hover", 
-        title:"bitch pls"})
+        trigger:"manual", 
+        title:"bitch pls"});
+      $this.hover(function(){
+        $(this).popover('show');
+        $(this).unbind('mouseenter mouseleave');
+        boxes.push(pop);
+      });
       var stock = myStocks[$this.html()];
     });
+    $(document).mousemove(updateBoxes);
+  });
+}
+
+var boxes = [];
+
+var percent = 0.2;
+
+function updateBoxes(ev){
+  $(".popover").each(function(k, b){
+    b = $(b)
+    var ow = b.outerWidth();
+    var oh = b.outerHeight() + 30;
+    var off = b.offset();
+    var top = off.top-oh*percent;
+    var left = off.left-ow*percent;
+    ow *= 1 + percent*2; oh *=1 + percent*2;
+//console.log((ev.pageX < left)+ " " +( ev.pageY < top )+ " " +( ev.pageX > left+ow )+ " " +( ev.pageY > top + oh));
+    if( ev.pageX < left || ev.pageY < top || ev.pageX > left+ow || ev.pageY > top + oh){
+      $('.bloomberg').popover('hide');
+      $('.bloomberg').unbind('mouseenter mouseleave');
+      $('.bloomberg').hover(function(){
+        $(this).popover('show');
+        $(this).unbind('mouseenter mouseleave');
+        boxes.push(pop);
+      });
+    }
   });
 }
 
