@@ -92,8 +92,6 @@ function loadBloomberg() {
     $(this).popover('show');
     $(this).unbind('mouseenter mouseleave');
   });
-
-  });
   $(document).mousemove(updateBoxes);
 });
 }
@@ -139,27 +137,6 @@ function popshow(){
 var percent = 0.2;
 
 function updateBoxes(ev) {
-  <<<<<<< HEAD
-    $(".popover").each(function(k, b) {
-      b = $(b)
-      var ow = b.outerWidth();
-    var oh = b.outerHeight() + 30;
-    var off = b.offset();
-    var top = off.top - oh * percent;
-    var left = off.left - ow * percent;
-    ow *= 1 + percent * 2;
-    oh *= 1 + percent * 2;
-    //console.log((ev.pageX < left)+ " " +( ev.pageY < top )+ " " +( ev.pageX > left+ow )+ " " +( ev.pageY > top + oh));
-    if (ev.pageX < left || ev.pageY < top || ev.pageX > left + ow || ev.pageY > top + oh) {
-      $('.bloomberg').popover('hide');
-      $('.bloomberg').unbind('mouseenter mouseleave');
-      $('.bloomberg').hover(function() {
-        $(this).popover('show');
-        $(this).unbind('mouseenter mouseleave');
-      });
-    }
-    });
-  =======
     $(".popover").each(function(k, b) {
       b = $(b)
       var ow = b.outerWidth();
@@ -176,7 +153,6 @@ function updateBoxes(ev) {
       $('.bloomberg').hover(popshow);
     }
     });
-  >>>>>>> 84943838366e40d5e756ed201c8499d41eabfd38
 }
 
 var aapl = null;
