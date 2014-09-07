@@ -1,4 +1,3 @@
-import java.util.ArrayList;
 import java.util.HashMap;
 
 import com.bloomberglp.blpapi.CorrelationID;
@@ -33,13 +32,13 @@ public class StockInfo {
     }
     
     private String[] com;
-    private ArrayList<HashMap<String, String>> values;
+    private HashMap<String, HashMap<String, String>> values;
 
-    public ArrayList<HashMap<String, String>> getValues() throws Exception {
+    public HashMap<String, HashMap<String, String>> getValues() throws Exception {
         String serverHost = "10.8.8.1";
         int serverPort = 8194;
         
-        values = new ArrayList<HashMap<String, String>>();
+        values = new HashMap<String, HashMap<String, String>>();
 
         SessionOptions sessionOptions = new SessionOptions();
         sessionOptions.setServerHost(serverHost);
@@ -66,7 +65,7 @@ public class StockInfo {
         for(String s : com)
         	securities.appendValue(s + " US Equity");
         Element fields = request.getElement("fields");
-        String[]sr = ("PX_CLOSE PX_LOW PX_HIGH PX_VOLUME PE_RATIO CUR_MKT_CAP HIGH_52WEEK LOW_52WEEK "
+        String[]sr = ("PX_CLOSE PX_LOW PX_HIGH PX_VOLUME PE_RATIO CUR_MKT_CAP HIGH_52WEEK LOW_52WEEK CHG_PCT_1D CHG_NET_1D "
         		+ "PX_OPEN VOLUME_AVG_30D DIVIDEND_YIELD TRAIL_12M_EPS EQY_SH_OUT_REAL EQY_BETA EQY_INST_PCT_SH_OUT "
         		+ "REL_PE_RATIO BEST_PEG_RATIO PX_TO_BOOK_RATIO PX_TO_SALES_RATIO EQY_DVD_YLD_IND").split(" ");
 
@@ -105,7 +104,7 @@ public class StockInfo {
                 Element field = fieldData.getElement(j);
                 map.put(field.name().toString(), field.getValueAsString());
             }
-            values.add(map);
+            values.put(securityData.getElementAsString(SECURITY), map);
             /*Element fieldExceptionArray =
                 securityData.getElement(FIELD_EXCEPTIONS);
             for (int k = 0; k < fieldExceptionArray.numValues(); ++k) {

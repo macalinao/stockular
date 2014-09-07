@@ -3,10 +3,10 @@
 import java.util.Date;
 
 public class StockValue{
-	Date date;
+	long date;
 	double value;
 	long volume;
-	StockValue(Date d, double v, long vol){
+	StockValue(long d, double v, long vol){
 		date = d;
 		value = v;
 		volume = vol;

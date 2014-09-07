@@ -146,7 +146,7 @@ public class StockInfoGraph {
             int numEvents = bar.getElementAsInt32(NUM_EVENTS);
             long volume = bar.getElementAsInt64(VOLUME);
             
-            list.add(new StockValue(time.calendar().getTime(), close, volume));
+            list.add(new StockValue(time.calendar().getTime().getTime(), close, volume));
 
             /*System.out.println(d_dateFormat.format(time.calendar().getTime()) + "\t" +
                     d_decimalFormat.format(open) + "\t\t" +

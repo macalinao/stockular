@@ -28,11 +28,11 @@ var stocks = [];
 
 $(document).ready(function() {
   //api tests
-  api(URL + "AAPL.json", null, function(data) {
+  /*api(URL + "AAPL.json", null, function(data) {
     console.log(data);
-  });
+    });*/
   api(URL + "list.json", null, function(data) {
-    console.log(data);
+    //console.log(data);
     stocks = data;
     loadBloomberg();
   })
@@ -48,92 +48,156 @@ function loadBloomberg() {
   var myStocks = {};
   $(function() {
     var names = [];
-  for (var i = 0; i < stocks.length; i++) {
-    var name = stocks[i].name;
-    if (name[name.length - 2] === ' ') {
-      name = name.substring(0, name.length - 2);
+    for (var i = 0; i < stocks.length; i++) {
+      var name = stocks[i].name;
+      if (name[name.length - 2] === ' ') {
+        name = name.substring(0, name.length - 2);
+      }
+      if (name[name.length - 1] === '.' || name.lastIndexOf('Co') === name.length - 2 || name.lastIndexOf('Corp') === name.length - 4 || name.lastIndexOf('Inc') === name.length - 3) {
+        name = stocks[i].name.substring(0, stocks[i].name.lastIndexOf(' '));
+      }
+      myStocks[name] = stocks[i];
+      names.push(name);
     }
-    if (name[name.length - 1] === '.' || name.lastIndexOf('Co') === name.length - 2 || name.lastIndexOf('Corp') === name.length - 4 || name.lastIndexOf('Inc') === name.length - 3) {
-      name = stocks[i].name.substring(0, stocks[i].name.lastIndexOf(' '));
-    }
-    myStocks[name] = stocks[i];
-    names.push(name);
-  }
-  $('p').highlight(names, {
-    caseSensitive: true,
-    className: 'bloomberg'
+    $('p').highlight(names, {
+      caseSensitive: true,
+      className: 'bloomberg'
+    });
+
+    var counter = 0
+    $('.bloomberg').each(function() {
+      counter++;
+      this.counter = counter;
+      var $this = $(this);
+      var stock = myStocks[$this.html()];
+      this.stock = stock.symbol;
+      if (!stock.detailedOnce) {
+        $this.html('<strong>' + $this.html() + '</strong>').append(' (NYSE: ' + stock.symbol + ')');
+          stock.detailedOnce = true;
+          }
+
+          $this.popover({
+            animation: true,
+            content: "<span id='popbody"+counter+"' ></span>",
+            html: true,
+            placement: "bottom",
+            trigger: "hover",
+            title: "<span id='poptitle"+counter+"' >" +stock.name + " (" + stock.symbol +")</span>"
+          });
+
+          $this.hover(popshow);
+          });
+
+  $this.hover(function() {
+    $(this).popover('show');
+    $(this).unbind('mouseenter mouseleave');
   });
-
-  $('.bloomberg').each(function() {
-    var $this = $(this);
-    var stock = myStocks[$this.html()];
-    if (!stock.detailedOnce) {
-      $this.wrap('<strong></strong>').append(' (NYSE: ' + stock.symbol + ')');
-      stock.detailedOnce = true;
-    }
-
-    $this.popover({
-      animation: true,
-      content: "Chart Goes Here!!!",
-      html: true,
-      placement: "top",
-      trigger: "hover",
-      title: "bitch pls",
-    });
-    
-    $this.hover(function() {
-      $(this).popover('show');
-      $(this).unbind('mouseenter mouseleave');
-    });
 
   });
   $(document).mousemove(updateBoxes);
 });
 }
 
+function popshow(){
+  api(URL + this.stock+".json", null, function(data) {
+    console.log(data);
+
+    var data = [];
+    var g = data.graph;
+    for(var  i = 0; i<g.length; i++)
+    data.push([g[i].date][g[i].value]);
+  $('#container').highcharts('StockChart', {
+
+    rangeSelector: {
+                     inputEnabled: $('#container').width() > 480,
+    selected: 1
+                   },
+
+    title: {
+             text: 'AAPL Stock Price'
+           },
+
+    series: [{
+              name: 'AAPL Stock Price',
+    data: data,
+    type: 'spline',
+    tooltip: {
+      valueDecimals: 2
+    }
+            }]
+  });
+  });
+  $this = $(this);
+  $this.unbind('mouseenter mouseleave');
+  $this.popover('show');
+  var bd = $("#popbody"+this.counter);
+  bd.html('<div id="container" style="height: 400px"></div>');
+
+
+}
+
 var percent = 0.2;
 
 function updateBoxes(ev) {
-$(".popover").each(function(k, b) {
-  b = $(b)
-  var ow = b.outerWidth();
-  var oh = b.outerHeight() + 30;
-  var off = b.offset();
-  var top = off.top - oh * percent;
-  var left = off.left - ow * percent;
-  ow *= 1 + percent * 2;
-  oh *= 1 + percent * 2;
-  //console.log((ev.pageX < left)+ " " +( ev.pageY < top )+ " " +( ev.pageX > left+ow )+ " " +( ev.pageY > top + oh));
-  if (ev.pageX < left || ev.pageY < top || ev.pageX > left + ow || ev.pageY > top + oh) {
-    $('.bloomberg').popover('hide');
-    $('.bloomberg').unbind('mouseenter mouseleave');
-    $('.bloomberg').hover(function() {
-      $(this).popover('show');
-      $(this).unbind('mouseenter mouseleave');
+  <<<<<<< HEAD
+    $(".popover").each(function(k, b) {
+      b = $(b)
+      var ow = b.outerWidth();
+    var oh = b.outerHeight() + 30;
+    var off = b.offset();
+    var top = off.top - oh * percent;
+    var left = off.left - ow * percent;
+    ow *= 1 + percent * 2;
+    oh *= 1 + percent * 2;
+    //console.log((ev.pageX < left)+ " " +( ev.pageY < top )+ " " +( ev.pageX > left+ow )+ " " +( ev.pageY > top + oh));
+    if (ev.pageX < left || ev.pageY < top || ev.pageX > left + ow || ev.pageY > top + oh) {
+      $('.bloomberg').popover('hide');
+      $('.bloomberg').unbind('mouseenter mouseleave');
+      $('.bloomberg').hover(function() {
+        $(this).popover('show');
+        $(this).unbind('mouseenter mouseleave');
+      });
+    }
     });
-  }
-});
+  =======
+    $(".popover").each(function(k, b) {
+      b = $(b)
+      var ow = b.outerWidth();
+    var oh = b.outerHeight() + 30;
+    var off = b.offset();
+    var top = off.top - oh * percent;
+    var left = off.left - ow * percent;
+    ow *= 1 + percent * 2;
+    oh *= 1 + percent * 2;
+    //console.log((ev.pageX < left)+ " " +( ev.pageY < top )+ " " +( ev.pageX > left+ow )+ " " +( ev.pageY > top + oh));
+    if (ev.pageX < left || ev.pageY < top || ev.pageX > left + ow || ev.pageY > top + oh) {
+      $('.bloomberg').popover('hide');
+      $('.bloomberg').unbind('mouseenter mouseleave');
+      $('.bloomberg').hover(popshow);
+    }
+    });
+  >>>>>>> 84943838366e40d5e756ed201c8499d41eabfd38
 }
 
 var aapl = null;
 
 function fake(data) {
-console.log(data)
-// Create the chart
-$('#chart-aapl').highcharts('StockChart', {
-  rangeSelector: {
-    selected: 1,
-    inputEnabled: $('#chart-aapl').width() > 480
-    },
-    title: {
-      text: 'AAPL Stock Price'
-    },
-    series: [{
-      name: 'AAPL',
+  console.log(data)
+    // Create the chart
+    $('#chart-aapl').highcharts('StockChart', {
+      rangeSelector: {
+                       selected: 1,
+      inputEnabled: $('#chart-aapl').width() > 480
+                     },
+      title: {
+               text: 'AAPL Stock Price'
+             },
+      series: [{
+                name: 'AAPL',
       data: data,
       tooltip: {
         valueDecimals: 2
       }
-    }]
-  });
+              }]
+    });
 }
