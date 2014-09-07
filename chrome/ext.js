@@ -83,7 +83,7 @@ function loadBloomberg() {
     var abc = this;
 
     api(URL + stock.symbol + ".json", null, function(data) {
-      var overviewContent = $('<div class="overviewContent"></div>').append('<div class="graph" id="graph'+abc.counter+'"></div>');
+      var overviewContent = $('<div class="overviewContent"></div>').append('<div class="graph" id="graph' + abc.counter + '"></div>');
 
       var volume = formatNumber(data.values.VOLUME_AVG_30D);
       var open = formatNumber(data.values.PX_OPEN);
@@ -102,22 +102,22 @@ function loadBloomberg() {
       var divdata = $('<div></div>');
       divdata.append([
         '<table class="table table-bordered">',
-        '<tr><td><b>Open:</b> ' + open +'</td>',
-        '<td><b>Close:</b> ' + close +'</td></tr>',
-        '<tr><td><b>Range:</b> ' + low +' - ' + high+'</td>',
-        '<td><b>52 Week:</b> ' + ylow +' - ' + yhigh+'</tr>',
+        '<tr><td><b>Open:</b> ' + open + '</td>',
+        '<td><b>Close:</b> ' + close + '</td></tr>',
+        '<tr><td><b>Range:</b> ' + low + ' - ' + high + '</td>',
+        '<td><b>52 Week:</b> ' + ylow + ' - ' + yhigh + '</tr>',
         '</td></tr></table>'
       ].join(''));
       overviewContent.append(divdata);
 
-      var liveviewContent = $('<div class="liveviewContent"></div>').append('<div class="graph" id="live'+abc.counter+'"></div>');
+      var liveviewContent = $('<div class="liveviewContent"></div>').append('<div class="graph" id="live' + abc.counter + '"></div>');
       var divdata2 = $('<div></div>');
       divdata2.append([
         '<table class="table table-bordered">',
-        '<tr><td><b>Volume:</b> ' + volume +'</td>',
-        '<td><b>Market Cap:</b> ' + mktCap +'</td></tr>',
-        '<tr><td><b>P/E Ratio:</b> ' + peRatio+'</td>',
-        '<td><b>EPS:</b> ' + eps+'</tr>',
+        '<tr><td><b>Volume:</b> ' + volume + '</td>',
+        '<td><b>Market Cap:</b> ' + mktCap + '</td></tr>',
+        '<tr><td><b>P/E Ratio:</b> ' + peRatio + '</td>',
+        '<td><b>EPS:</b> ' + eps + '</tr>',
         '</td></tr></table>'
       ].join(''));
       liveviewContent.append(divdata2);
@@ -129,17 +129,17 @@ function loadBloomberg() {
         html: true,
         placement: "bottom",
         trigger: "none",
-        title: '<div class="btn-group"><button type="button" class="btn btn-default" id="overBtn'+abc.counter+'">Overview</button>'+
-        '<button type="button" class="btn btn-default" id="liveBtn'+abc.counter+'">Live View</button><button type="button" class="btn btn-default">Rift View</button></div>' 
+        title: '<div class="btn-group"><button type="button" class="btn btn-default" id="overBtn' + abc.counter + '">Overview</button>' +
+          '<button type="button" class="btn btn-default" id="liveBtn' + abc.counter + '">Live View</button><button type="button" class="btn btn-default">Rift View</button></div>'
       });
 
-      abc.titleHtml = '<b>'+stock.symbol + ' '+close +'</b>' + 
-        '<span style="color:'+(netChange > 0 ? 'green"> +':'red"> ')+ netChange + ' ('+percentChange+'%)</span>';
+      abc.titleHtml = '<b>' + stock.symbol + ' ' + close + '</b>' +
+        '<span style="color:' + (netChange > 0 ? 'green"> +' : 'red"> ') + netChange + ' (' + percentChange + '%)</span>';
 
       var gdata = [];
       var g = data.graph;
       for (var i = 0; i < g.length; i++)
-        gdata.push([g[i].date - 1000*60*60*4, g[i].value]);
+        gdata.push([g[i].date - 1000 * 60 * 60 * 4, g[i].value]);
       abc.gdata = gdata;
 
     });
@@ -147,13 +147,97 @@ function loadBloomberg() {
 
 }
 
-function show_Live(num){
-  console.log("wtffffffff");
+var wtfffff;
+var curstock;
+var curLive;
+
+
+
+function show_Live(stock, num, openn) {
+  wtfffff = true;
+  curstock = stock.symbol;
+  $.ajax(URL+ "classes/live.php?val=" + stock.symbol )
+                .done(function(data) {
+                  var currentt = parseFloat(data);
+  $('#live' + num).highcharts({
+            chart: {
+                type: 'spline',
+                animation: Highcharts.svg, // don't animate in old IE
+                marginRight: 10,
+                events: {
+                    load: function() {
+    
+                        // set up the updating of the chart each second
+                        var series = this.series[0];
+                        var abccc = function() {
+                            
+                            $.ajax(URL+ "classes/live.php?val=" + stock.symbol )
+                .done(function(data) {
+                  var x = (new Date()).getTime(), // current time
+                                y = parseFloat(data);
+                                console.log(data);
+                                if( data != 0.0)
+                            series.addPoint([x, y], true, true);
+                          if( wtfffff)
+                            abccc();
+                });
+                        }
+                        abccc();
+                    }
+                }
+            },
+            title: {
+                text: 'Graph'
+            },
+            xAxis: {
+                type: 'datetime',
+                tickPixelInterval: 150
+            },
+            yAxis: {
+                title: {
+                    text: 'Value'
+                },
+                plotLines: [{
+                    value: 0,
+                    width: 1,
+                    color: '#808080'
+                }]
+            },
+            tooltip: {
+                formatter: function() {
+                        return '<b>'+ this.series.name +'</b><br/>'+
+                        Highcharts.dateFormat('%Y-%m-%d %H:%M:%S', this.x) +'<br/>'+
+                        Highcharts.numberFormat(this.y, 2);
+                }
+            },
+            legend: {
+                enabled: false
+            },
+            exporting: {
+                enabled: false
+            },
+            series: [{
+                name: 'Value',
+                data: (function() {
+                                    // generate an array of random data
+                                    var data = []
+                                    for (i = -49; i <= 0; i++) {
+                                        data.push({
+                                            x: (new Date()).getTime()+i*1000,
+                                            y: parseFloat(currentt)
+                                        });
+                                    }
+                                    return data;
+                                })()
+            }]
+        });
+});
   $('.overviewContent').hide();
   $('.liveviewContent').show();
 }
 
-function show_Over(num){
+function show_Over(stock) {
+  wtfffff = false;
   $('.overviewContent').show(0);
   $('.liveviewContent').hide(0);
 }
@@ -163,11 +247,16 @@ function popshow() {
   $this.unbind('mouseenter mouseleave');
   $this.popover('show');
   var ct = this.counter;
-  show_Over(ct);
-  $("#overBtn" + ct).click(function(){show_Over(ct);});
-  $("#liveBtn" + ct).click(function(){show_Live(ct);});
+  var abc = this;
+  show_Over(abc.stock);
+  $("#overBtn" + ct).click(function() {
+    show_Over(abc.stock);
+  });
+  $("#liveBtn" + ct).click(function() {
+    show_Live(abc.stock, ct, abc.open);
+  });
 
-  $('#graph'+this.counter).highcharts('StockChart', {
+  $('#graph' + this.counter).highcharts('StockChart', {
 
     rangeSelector: {
       enabled: false
@@ -185,11 +274,13 @@ function popshow() {
         valueDecimals: 2
       }
     }],
-    scrollbar: { enabled: false },
-    exporting:{
+    scrollbar: {
       enabled: false
     },
-    navigator:{
+    exporting: {
+      enabled: false
+    },
+    navigator: {
       enabled: false
     }
   });
@@ -213,15 +304,16 @@ function updateBoxes(ev) {
       $('.bloomberg').popover('hide');
       $('.bloomberg').unbind('mouseenter mouseleave');
       $('.bloomberg').hover(popshow);
+      wtfffff = false;
     }
   });
 }
 
 //pls use this, thank you
-function formatNumber(x){
+function formatNumber(x) {
   x = parseFloat(x);
-  if( x > 1e9) return numberWithCommas((x / 1e9).toFixed(2)) + "B";
-  if( x > 1e6) return numberWithCommas((x / 1e6).toFixed(2)) + "M";
+  if (x > 1e9) return numberWithCommas((x / 1e9).toFixed(2)) + "B";
+  if (x > 1e6) return numberWithCommas((x / 1e6).toFixed(2)) + "M";
   return numberWithCommas(x.toFixed(2))
 }
 

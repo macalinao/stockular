@@ -1,7 +1,6 @@
 
 
-import java.text.DecimalFormat;
-import java.text.SimpleDateFormat;
+import java.io.PrintWriter;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -41,10 +40,14 @@ public class StockInfoGraphLive {
     private String endDateTime;
     private String stock;
     private String security;
-    private double value;
+    public double value;
     public static void main(String[] args) throws Exception {
-        StockInfoGraphLive example = new StockInfoGraphLive("AAPL", 1);
+        StockInfoGraphLive example = new StockInfoGraphLive(args[0], 1);
         example.run();
+        //PrintWriter out = new PrintWriter(StockConfig.OUTPUT+"val.json");
+        //out.println(example.value);
+        System.out.println(example.value);
+        //out.close();
     }
 
     private Calendar getPreviousTradingDate()
@@ -121,8 +124,8 @@ public class StockInfoGraphLive {
     private void processMessage(Message msg) throws Exception {
         Element data = msg.getElement(TICK_DATA).getElement(TICK_DATA);
         int numItems = data.numValues();
-        System.out.println("TIME\t\t\tTYPE\tVALUE\t\tSIZE\tCC");
-        System.out.println("----\t\t\t----\t-----\t\t----\t--");
+        //System.out.println("TIME\t\t\tTYPE\tVALUE\t\tSIZE\tCC");
+        //System.out.println("----\t\t\t----\t-----\t\t----\t--");
         for (int i = 0; i < numItems; ++i) {
             Element item = data.getValueAsElement(i);
             Datetime time = item.getElementAsDate(TIME);
@@ -139,6 +142,7 @@ public class StockInfoGraphLive {
                     (value) + "\t\t" +
                     (size) + "\t" +
                     cc);*/
+            this.value = value;
         }
     }
 
@@ -169,7 +173,7 @@ public class StockInfoGraphLive {
             Datetime prevTradeDateTime = new Datetime(calendar);
 
             // set the end date for next day
-            calendar.roll(Calendar.SECOND, -3);
+            calendar.roll(Calendar.MINUTE, -1);
             Datetime startDateTime = new Datetime(calendar);
 
             request.set("startDateTime", startDateTime);
@@ -180,7 +184,7 @@ public class StockInfoGraphLive {
             request.set("endDateTime", endDateTime);
         }
 
-        System.out.println("Sending Request: " + request);
+        //System.out.println("Sending Request: " + request);
         session.sendRequest(request, null);
     }
 
