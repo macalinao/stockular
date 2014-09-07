@@ -91,7 +91,7 @@ function loadBloomberg() {
         var leftData = $('<div class="col"></div>');
         leftData.append('<strong>Market cap:</strong> ' + data.values.CUR_MKT_CAP);
         leftData.append('<strong>P/E Ratio:</strong> ' + data.values.PE_RATIO);
-        popover.content(leftData.html());
+        popover.content = leftData.html();
       });
 
     });
