@@ -92,7 +92,7 @@ public class SimpleFieldSearchExample {
 
         Service fieldInfoService = session.getService(APIFLDS_SVC);
         Request request = fieldInfoService.createRequest("FieldSearchRequest");
-        request.set ("searchSpec", "chief executive");
+        request.set ("searchSpec", "price change");
         Element exclude = request.getElement("exclude");
         //exclude.setElement ("fieldType", "Static");
         request.set ("returnFieldDocumentation", false);

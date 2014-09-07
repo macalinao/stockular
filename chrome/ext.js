@@ -28,11 +28,11 @@ var stocks = [];
 
 $(document).ready(function() {
   //api tests
-  api(URL + "AAPL.json", null, function(data) {
+  /*api(URL + "AAPL.json", null, function(data) {
     console.log(data);
-  });
+  });*/
   api(URL + "list.json", null, function(data) {
-    console.log(data);
+    //console.log(data);
     stocks = data;
     loadBloomberg();
   })
@@ -64,9 +64,13 @@ function loadBloomberg() {
       className: 'bloomberg'
     });
 
+    var counter = 0
     $('.bloomberg').each(function() {
+      counter++;
+      this.counter = counter;
       var $this = $(this);
       var stock = myStocks[$this.html()];
+      this.stock = stock.symbol;
       if (!stock.detailedOnce) {
         $this.html('<strong>' + $this.html() + '</strong>').append(' (NYSE: ' + stock.symbol + ')');
         stock.detailedOnce = true;
@@ -74,20 +78,28 @@ function loadBloomberg() {
 
       $this.popover({
         animation: true,
-        content: "yes",
+        content: "<span id='popbody"+counter+"' ></span>",
         html: true,
-        placement: "top",
+        placement: "bottom",
         trigger: "hover",
-        title: "bitch pls"
+        title: "<span id='poptitle"+counter+"' >" +stock.name + " (" + stock.symbol +")</span>"
       });
 
-      $this.hover(function() {
-        $(this).popover('show');
-        $(this).unbind('mouseenter mouseleave');
-      });
+      $this.hover(popshow);
     });
     $(document).mousemove(updateBoxes);
   });
+}
+
+function popshow(){
+  api(URL + this.stock+".json", null, function(data) {
+    console.log(data);
+  });
+  $this = $(this);
+  $this.unbind('mouseenter mouseleave');
+  $this.popover('show');
+  var bd = $("#popbody"+this.counter);
+  bd.html('<div id="container" style="height: 400px"></div>');
 }
 
 var percent = 0.2;
@@ -106,10 +118,7 @@ function updateBoxes(ev) {
     if (ev.pageX < left || ev.pageY < top || ev.pageX > left + ow || ev.pageY > top + oh) {
       $('.bloomberg').popover('hide');
       $('.bloomberg').unbind('mouseenter mouseleave');
-      $('.bloomberg').hover(function() {
-        $(this).popover('show');
-        $(this).unbind('mouseenter mouseleave');
-      });
+      $('.bloomberg').hover(popshow);
     }
   });
 }
