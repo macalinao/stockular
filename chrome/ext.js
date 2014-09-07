@@ -89,7 +89,7 @@ function loadBloomberg() {
       api(URL + stock.symbol + ".json", null, function(data) {
         console.log(data);
         var leftData = $('<div class="col"></div>');
-        leftData.append('<strong>Market cap:</strong> ' + data.values.CUR_MKT_CAP);
+        leftData.append('<strong>Market cap:</strong> $' + (data.values.CUR_MKT_CAP / 1000000).toFixed(2) + ' million');
         leftData.append('<strong>P/E Ratio:</strong> ' + data.values.PE_RATIO);
         console.log(popover);
         popover.html(leftData.html());
