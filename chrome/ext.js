@@ -44,8 +44,8 @@ $(document).ready(function() {
    */
 
 
+var myStocks = {};
 function loadBloomberg() {
-  var myStocks = {};
   $(function() {
     var names = [];
     for (var i = 0; i < stocks.length; i++) {
@@ -129,6 +129,45 @@ function loadBloomberg() {
 });
 }
 
+function popshow(){
+  api(URL + this.stock+".json", null, function(data) {
+    console.log(data);
+
+    var gdata = [];
+    var g = data.graph;
+    for(var  i = 0; i<g.length; i++)
+      gdata.push([g[i].date, g[i].value]);
+    console.log(gdata);
+    $('#container2').highcharts('StockChart', {
+
+            rangeSelector: {
+                inputEnabled: $('#container').width() > 480,
+                selected: 1
+            },
+
+            title: {
+                text: data.name.symbol + ' Stock'
+            },
+
+            series: [{
+                name: data.name.symbol,
+                data: gdata,
+                type: 'spline',
+                tooltip: {
+                    valueDecimals: 2
+                }
+            }]
+        });
+  });
+  $this = $(this);
+  $this.unbind('mouseenter mouseleave');
+  $this.popover('show');
+  var bd = $("#popbody"+this.counter);
+  bd.html('');
+
+
+}
+
 var percent = 0.2;
 
 function updateBoxes(ev) {
@@ -150,28 +189,5 @@ function updateBoxes(ev) {
         $(this).unbind('mouseenter mouseleave');
       });
     }
-  });
-}
-
-var aapl = null;
-
-function fake(data) {
-  console.log(data)
-  // Create the chart
-  $('#chart-aapl').highcharts('StockChart', {
-    rangeSelector: {
-      selected: 1,
-      inputEnabled: $('#chart-aapl').width() > 480
-    },
-    title: {
-      text: 'AAPL Stock Price'
-    },
-    series: [{
-      name: 'AAPL',
-      data: data,
-      tooltip: {
-        valueDecimals: 2
-      }
-    }]
   });
 }
