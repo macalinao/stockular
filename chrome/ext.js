@@ -129,7 +129,7 @@ function loadBloomberg() {
         placement: "bottom",
         trigger: "none",
         title: '<div class="btn-group"><button type="button" class="btn btn-default">Overview</button>'+
-        '<button type="button" class="btn btn-default">Live View</button><button type="button" class="btn btn-default" class="rift-view">Rift View</button></div>' 
+        '<button type="button" class="btn btn-default">Live View</button><button type="button" class="btn btn-default rift-view">Rift View</button></div>' 
       });
 
       abc.titleHtml =         '<b>'+stock.symbol + ' '+close +'</b>' + 
