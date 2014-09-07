@@ -74,7 +74,7 @@ function loadBloomberg() {
 
       api(URL + stock.symbol + ".json", null, function(data) {
         var popoverContent = $('<div class="popover-content"></div>');
-        
+
         var volume = data.values.VOLUME_AVG_30D;
         var open = data.values.PX_OPEN;
         var high = data.values.PX_HIGH;
@@ -94,9 +94,8 @@ function loadBloomberg() {
           '<tr><td>Close</td><td>' + close,
           '<tr><td>Market cap</td><td>' + mktCap,
           '<tr><td>P/E Ratio</td><td>' + peRatio,
-          '<tr><td>Dividend Yield</td><td>' + divYield 
-          '</table>'
-          ].join(''));
+          '<tr><td>Dividend Yield</td><td>' + divYield '</table>'
+        ].join(''));
         popoverContent.append(leftData);
 
         var rightData = $('<div class="col"><ul></ul></div>');
@@ -109,7 +108,7 @@ function loadBloomberg() {
           html: true,
           placement: "top",
           trigger: "hover",
-          title: "bitch pls"
+          title: '(NYSE:<strong> ' + stock.symbol + '</strong>)'
         });
 
         $this.hover(function() {
@@ -118,9 +117,15 @@ function loadBloomberg() {
         });
       });
 
+      $this.hover(function() {
+        $(this).popover('show');
+        $(this).unbind('mouseenter mouseleave');
+      });
     });
-    $(document).mousemove(updateBoxes);
+
   });
+  $(document).mousemove(updateBoxes);
+});
 }
 
 var percent = 0.2;
