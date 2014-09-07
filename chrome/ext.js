@@ -44,8 +44,8 @@ $(document).ready(function() {
    */
 
 
+var myStocks = {};
 function loadBloomberg() {
-  var myStocks = {};
   $(function() {
     var names = [];
     for (var i = 0; i < stocks.length; i++) {
@@ -69,7 +69,7 @@ function loadBloomberg() {
       counter++;
       this.counter = counter;
       var $this = $(this);
-      var stock = myStocks[$this.html()];
+      var stock = myStocks[$this.text()];
       this.stock = stock.symbol;
       if (!stock.detailedOnce) {
         $this.html('<strong>' + $this.html() + '</strong>').append(' (NYSE: ' + stock.symbol + ')');
@@ -95,11 +95,12 @@ function popshow(){
   api(URL + this.stock+".json", null, function(data) {
     console.log(data);
 
-    var data = [];
+    var gdata = [];
     var g = data.graph;
     for(var  i = 0; i<g.length; i++)
-      data.push([g[i].date][g[i].value]);
-    $('#container').highcharts('StockChart', {
+      gdata.push([g[i].date, g[i].value]);
+    console.log(gdata);
+    $('#container2').highcharts('StockChart', {
 
             rangeSelector: {
                 inputEnabled: $('#container').width() > 480,
@@ -107,12 +108,12 @@ function popshow(){
             },
 
             title: {
-                text: 'AAPL Stock Price'
+                text: data.name.symbol + ' Stock'
             },
 
             series: [{
-                name: 'AAPL Stock Price',
-                data: data,
+                name: data.name.symbol,
+                data: gdata,
                 type: 'spline',
                 tooltip: {
                     valueDecimals: 2
@@ -124,7 +125,7 @@ function popshow(){
   $this.unbind('mouseenter mouseleave');
   $this.popover('show');
   var bd = $("#popbody"+this.counter);
-  bd.html('<div id="container" style="height: 400px"></div>');
+  bd.html('<div id="container2" style="height: 250px; width:260px"></div>');
 
 
 }
