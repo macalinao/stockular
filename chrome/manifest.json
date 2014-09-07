@@ -9,5 +9,8 @@
     "js": ["jquery.min.js", "highlight.min.js", "highstock.js", "exporting.js", "ext.js", "bootstrap.min.js"],
     "matches": ["http://*/*", "https://*/*"],
     "run_at": "document_end"
-  }]
+  }],
+  "permissions": [
+    "tabs"
+  ]
 }
