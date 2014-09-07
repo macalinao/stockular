@@ -1,7 +1,7 @@
 /* 
-@start: api stuff
-@author: Andrew Liu
-*/
+   @start: api stuff
+   @author: Andrew Liu
+   */
 
 var URL = "http://cywoods.wynd07.com/work/";
 
@@ -40,8 +40,8 @@ $(document).ready(function() {
 
 
 /*
-@end: api stuff
-*/
+   @end: api stuff
+   */
 
 
 function loadBloomberg() {
@@ -69,17 +69,16 @@ function loadBloomberg() {
       var stock = myStocks[$this.html()];
       if (!stock.detailedOnce) {
         $this.wrap('<strong></strong>').append(' (NYSE: ' + stock.symbol + ')');
-        stock.detailedOnce = true;
-      }
-
-      $this.popover({
-        animation: true,
-        content: "yes",
-        html: true,
-        placement: "top",
-        trigger: "hover",
-        title: "bitch pls"
-      })
+          stock.detailedOnce = true;
+          }
+          $this.popover({
+            animation: true,
+            content: "yes",
+            html: true,
+            placement: "top",
+            trigger: "hover",
+            title: "bitch pls"
+          })
     });
   });
 }
@@ -88,21 +87,21 @@ var aapl = null;
 
 function fake(data) {
   console.log(data)
-  // Create the chart
-  $('#chart-aapl').highcharts('StockChart', {
-    rangeSelector: {
-      selected: 1,
+    // Create the chart
+    $('#chart-aapl').highcharts('StockChart', {
+      rangeSelector: {
+                       selected: 1,
       inputEnabled: $('#chart-aapl').width() > 480
-    },
-    title: {
-      text: 'AAPL Stock Price'
-    },
-    series: [{
-      name: 'AAPL',
+                     },
+      title: {
+               text: 'AAPL Stock Price'
+             },
+      series: [{
+                name: 'AAPL',
       data: data,
       tooltip: {
         valueDecimals: 2
       }
-    }]
-  });
+              }]
+    });
 }
