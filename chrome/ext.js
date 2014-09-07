@@ -28,11 +28,11 @@ var stocks = [];
 
 $(document).ready(function() {
   //api tests
-  /*api(URL + "AAPL.json", null, function(data) {
+  api(URL + "AAPL.json", null, function(data) {
     console.log(data);
-    });*/
+  });
   api(URL + "list.json", null, function(data) {
-    //console.log(data);
+    console.log(data);
     stocks = data;
     loadBloomberg();
   })
@@ -64,82 +64,48 @@ function loadBloomberg() {
       className: 'bloomberg'
     });
 
-    var counter = 0
     $('.bloomberg').each(function() {
-      counter++;
-      this.counter = counter;
       var $this = $(this);
       var stock = myStocks[$this.html()];
-      this.stock = stock.symbol;
       if (!stock.detailedOnce) {
         $this.html('<strong>' + $this.html() + '</strong>').append(' (NYSE: ' + stock.symbol + ')');
-          stock.detailedOnce = true;
-          }
+        stock.detailedOnce = true;
+      }
 
-          $this.popover({
-            animation: true,
-            content: "<span id='popbody"+counter+"' ></span>",
-            html: true,
-            placement: "bottom",
-            trigger: "hover",
-            title: "<span id='poptitle"+counter+"' >" +stock.name + " (" + stock.symbol +")</span>"
-          });
 
-          $this.hover(popshow);
-          });
+      var popover = $this.popover({
+        animation: true,
+        content: 'placeholder',
+        html: true,
+        placement: "top",
+        trigger: "hover",
+        title: "bitch pls"
+      });
 
-  $this.hover(function() {
-    $(this).popover('show');
-    $(this).unbind('mouseenter mouseleave');
+      $this.hover(function() {
+        $(this).popover('show');
+        $(this).unbind('mouseenter mouseleave');
+      });
+
+      api(URL + stock.symbol + ".json", null, function(data) {
+        console.log(data);
+        var leftData = $('<div class="col"></div>');
+        leftData.append('<strong>Market cap:</strong> ' + data.values.CUR_MKT_CAP);
+        leftData.append('<strong>P/E Ratio:</strong> ' + data.values.PE_RATIO);
+        popover.content(leftData.html());
+      });
+
+    });
+    $(document).mousemove(updateBoxes);
   });
-  $(document).mousemove(updateBoxes);
-});
-}
-
-function popshow(){
-  api(URL + this.stock+".json", null, function(data) {
-    console.log(data);
-
-    var data = [];
-    var g = data.graph;
-    for(var  i = 0; i<g.length; i++)
-    data.push([g[i].date][g[i].value]);
-  $('#container').highcharts('StockChart', {
-
-    rangeSelector: {
-                     inputEnabled: $('#container').width() > 480,
-    selected: 1
-                   },
-
-    title: {
-             text: 'AAPL Stock Price'
-           },
-
-    series: [{
-              name: 'AAPL Stock Price',
-    data: data,
-    type: 'spline',
-    tooltip: {
-      valueDecimals: 2
-    }
-            }]
-  });
-  });
-  $this = $(this);
-  $this.unbind('mouseenter mouseleave');
-  $this.popover('show');
-  var bd = $("#popbody"+this.counter);
-  bd.html('<div id="container" style="height: 400px"></div>');
-
-
 }
 
 var percent = 0.2;
 
 function updateBoxes(ev) {
-    $(".popover").each(function(k, b) {
-      b = $(b)
-      var ow = b.outerWidth();
+  $(".popover").each(function(k, b) {
+    b = $(b)
+    var ow = b.outerWidth();
     var oh = b.outerHeight() + 30;
     var off = b.offset();
     var top = off.top - oh * percent;
@@ -150,30 +116,33 @@ function updateBoxes(ev) {
     if (ev.pageX < left || ev.pageY < top || ev.pageX > left + ow || ev.pageY > top + oh) {
       $('.bloomberg').popover('hide');
       $('.bloomberg').unbind('mouseenter mouseleave');
-      $('.bloomberg').hover(popshow);
+      $('.bloomberg').hover(function() {
+        $(this).popover('show');
+        $(this).unbind('mouseenter mouseleave');
+      });
     }
-    });
+  });
 }
 
 var aapl = null;
 
 function fake(data) {
   console.log(data)
-    // Create the chart
-    $('#chart-aapl').highcharts('StockChart', {
-      rangeSelector: {
-                       selected: 1,
+  // Create the chart
+  $('#chart-aapl').highcharts('StockChart', {
+    rangeSelector: {
+      selected: 1,
       inputEnabled: $('#chart-aapl').width() > 480
-                     },
-      title: {
-               text: 'AAPL Stock Price'
-             },
-      series: [{
-                name: 'AAPL',
+    },
+    title: {
+      text: 'AAPL Stock Price'
+    },
+    series: [{
+      name: 'AAPL',
       data: data,
       tooltip: {
         valueDecimals: 2
       }
-              }]
-    });
+    }]
+  });
 }
