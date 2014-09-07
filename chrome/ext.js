@@ -81,7 +81,7 @@ function loadBloomberg() {
         title: "bitch pls"
       });
 
-      $this.hover(function(){
+      $this.hover(function() {
         $(this).popover('show');
         $(this).unbind('mouseenter mouseleave');
       });
@@ -92,20 +92,21 @@ function loadBloomberg() {
 
 var percent = 0.2;
 
-function updateBoxes(ev){
-  $(".popover").each(function(k, b){
+function updateBoxes(ev) {
+  $(".popover").each(function(k, b) {
     b = $(b)
     var ow = b.outerWidth();
     var oh = b.outerHeight() + 30;
     var off = b.offset();
-    var top = off.top-oh*percent;
-    var left = off.left-ow*percent;
-    ow *= 1 + percent*2; oh *=1 + percent*2;
-//console.log((ev.pageX < left)+ " " +( ev.pageY < top )+ " " +( ev.pageX > left+ow )+ " " +( ev.pageY > top + oh));
-    if( ev.pageX < left || ev.pageY < top || ev.pageX > left+ow || ev.pageY > top + oh){
+    var top = off.top - oh * percent;
+    var left = off.left - ow * percent;
+    ow *= 1 + percent * 2;
+    oh *= 1 + percent * 2;
+    //console.log((ev.pageX < left)+ " " +( ev.pageY < top )+ " " +( ev.pageX > left+ow )+ " " +( ev.pageY > top + oh));
+    if (ev.pageX < left || ev.pageY < top || ev.pageX > left + ow || ev.pageY > top + oh) {
       $('.bloomberg').popover('hide');
       $('.bloomberg').unbind('mouseenter mouseleave');
-      $('.bloomberg').hover(function(){
+      $('.bloomberg').hover(function() {
         $(this).popover('show');
         $(this).unbind('mouseenter mouseleave');
       });
@@ -117,21 +118,21 @@ var aapl = null;
 
 function fake(data) {
   console.log(data)
-    // Create the chart
-    $('#chart-aapl').highcharts('StockChart', {
-      rangeSelector: {
-                       selected: 1,
+  // Create the chart
+  $('#chart-aapl').highcharts('StockChart', {
+    rangeSelector: {
+      selected: 1,
       inputEnabled: $('#chart-aapl').width() > 480
-                     },
-      title: {
-               text: 'AAPL Stock Price'
-             },
-      series: [{
-                name: 'AAPL',
+    },
+    title: {
+      text: 'AAPL Stock Price'
+    },
+    series: [{
+      name: 'AAPL',
       data: data,
       tooltip: {
         valueDecimals: 2
       }
-              }]
-    });
+    }]
+  });
 }
