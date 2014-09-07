@@ -10,8 +10,14 @@
   ],
    "content_scripts": [{
     "css": ["style.css"],
-    "js": ["jquery.min.js", "highlight.min.js", "highstock.js", "exporting.js", "ext.js", "bootstrap.min.js"],
+    "js": ["jquery.min.js", "highlight.min.js", "highstock.js", "exporting.js", "bootstrap.min.js", "ext.js"],
     "matches": ["http://*/*", "https://*/*"],
     "run_at": "document_end"
-  }]
+  }],
+  "permissions": [
+    "tabs"
+  ],
+  "background": {
+    "scripts": ["background.js"]
+  }
 }
