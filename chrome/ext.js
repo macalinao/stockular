@@ -108,7 +108,6 @@ function updateBoxes(ev){
       $('.bloomberg').hover(function(){
         $(this).popover('show');
         $(this).unbind('mouseenter mouseleave');
-        boxes.push(pop);
       });
     }
   });
