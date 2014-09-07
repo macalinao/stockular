@@ -64,6 +64,7 @@ public class StockInfoGraph {
         	date.add(Calendar.DAY_OF_MONTH, -1);
         }
         date.set(Calendar.HOUR, 5);
+        date.add(Calendar.MONTH, -1);
         date.set(Calendar.MINUTE, 30);
         return date;
     }
@@ -152,13 +153,13 @@ public class StockInfoGraph {
             cal.add(Calendar.HOUR, -4);
             list.add(new StockValue(cal.getTime().getTime(), close, volume));
 
-            System.out.println(d_dateFormat.format(cal.getTime()) + "\t" +
+            /*System.out.println(d_dateFormat.format(cal.getTime()) + "\t" +
                     d_decimalFormat.format(open) + "\t\t" +
                     d_decimalFormat.format(high) + "\t\t" +
                     d_decimalFormat.format(low) + "\t\t" +
                     d_decimalFormat.format(close) + "\t\t" +
                     d_decimalFormat.format(numEvents) + "\t\t" +
-                    d_decimalFormat.format(volume));
+                    d_decimalFormat.format(volume));*/
         }
     }
 
@@ -188,7 +189,7 @@ public class StockInfoGraph {
             Calendar calendar = getPreviousTradingDate();
             Datetime prevTradeDateTime = new Datetime(calendar);
 
-            calendar.roll(Calendar.DAY_OF_MONTH, +1);
+            calendar.roll(Calendar.MONTH, +1);
             Datetime endDateTime = new Datetime(calendar);
 
             request.set("startDateTime", prevTradeDateTime);

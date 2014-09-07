@@ -27,11 +27,7 @@ var stocks = [];
 
 $(document).ready(function() {
   //api tests
-  api(URL + "AAPL.json", null, function(data) {
-    console.log(data);
-  });
   api(URL + "list.json", null, function(data) {
-    console.log(data);
     stocks = data;
     loadBloomberg();
   })
@@ -69,40 +65,49 @@ function loadBloomberg() {
     className: 'bloomberg'
   });
 
+  var counter = 0;
   $('.bloomberg').each(function() {
+    counter++;
     var $this = $(this);
     var stock = myStocks[$this.text()];
     if (!stock.detailedOnce) {
       $this.html('<strong>' + $this.html() + '</strong>').append(' (NYSE: ' + stock.symbol + ')');
       stock.detailedOnce = true;
     }
+    this.stock = stock;
+    this.counter = counter;
+
+
+    $this.hover(popshow);
+
+    var abc = this;
 
     api(URL + stock.symbol + ".json", null, function(data) {
-      var popoverContent = $('<div class="popover-content"></div>');
+      var popoverContent = $('<div class="popover-content"><div class="graph" id="graph'+abc.counter+'"></div></div>');
 
-      var volume = data.values.VOLUME_AVG_30D;
-      var open = data.values.PX_OPEN;
-      var high = data.values.PX_HIGH;
-      var low = data.values.PX_LOW;
-      var close = data.values.PX_CLOSE;
-      var mktCap = (data.values.CUR_MKT_CAP / 1000000).toFixed(2) + ' M';
-      var peRatio = data.values.PE_RATIO;
-      var divYield = data.values.DIVIDEND_YIELD;
+      var volume = formatNumber(data.values.VOLUME_AVG_30D);
+      var open = formatNumber(data.values.PX_OPEN);
+      var high = formatNumber(data.values.PX_HIGH);
+      var low = formatNumber(data.values.PX_LOW);
+      var yhigh = formatNumber(data.values.HIGH_52WEEK);
+      var ylow = formatNumber(data.values.LOW_52WEEK);
+      var close = formatNumber(data.values.PX_CLOSE);
+      var mktCap = formatNumber(data.values.CUR_MKT_CAP);
+      var peRatio = formatNumber(data.values.PE_RATIO);
+      var divYield = formatNumber(data.values.DIVIDEND_YIELD);
+      var netChange = formatNumber(data.values.CHG_NET_1D);
+      var percentChange = formatNumber(data.values.CHG_PCT_1D);
 
-      var leftData = $('<div class="col"><ul></ul></div>');
-      leftData.append([
-        '<table>',
-        '<tr><td>Volume</td><td>' + volume,
-        '</td></tr><tr><td>Open</td><td>' + open,
-        '</td></tr><tr><td>High</td><td>' + high,
-        '</td></tr><tr><td>Low</td><td>' + low,
-        '</td></tr><tr><td>Close</td><td>' + close,
-        '</td></tr><tr><td>Market cap</td><td>' + mktCap,
-        '</td></tr><tr><td>P/E Ratio</td><td>' + peRatio,
-        '</td></tr><tr><td>Dividend Yield</td><td>' + divYield,
+      var divdata = $('<div></div>');
+      divdata.append([
+        '<table class="table table-bordered">',
+        '<tr><td><b>Open:</b> ' + open +'</td>',
+        '<td><b>Close:</b> ' + close +'</td></tr>',
+        '<tr><td><b>Range:</b> ' + low +' - ' + high+'</td>',
+        '<td><b>52 Week:</b> ' + ylow +' - ' + yhigh+'</tr>',
         '</td></tr></table>'
       ].join(''));
-      popoverContent.append(leftData);
+      popoverContent.append(divdata);
 
       var rightData = $('<div class="col"><ul></ul></div>');
       rightData.append('<li><strong>Market cap:</strong> $' + numberWithCommas((data.values.CUR_MKT_CAP / 1000000).toFixed(2)) + ' million</li>');
@@ -112,58 +117,66 @@ function loadBloomberg() {
         animation: true,
         content: popoverContent.html(),
         html: true,
-        placement: "top",
-        trigger: "hover",
-        title: '(NYSE:<strong> ' + stock.symbol + '</strong>)'
+        placement: "bottom",
+        trigger: "none",
+        title: '<div class="btn-group"><button type="button" class="btn btn-default">Left</button>'+
+        '<button type="button" class="btn btn-default">Middle</button><button type="button" class="btn btn-default">Right</button></div>' 
       });
+
+      abc.titleHtml =         '<b>'+stock.symbol + ' '+close +'</b>' + 
+        '<span style="color:'+(netChange > 0 ? 'green"> +':'red"> ')+ netChange + ' ('+percentChange+'%)</span>';
+
+      var gdata = [];
+      var g = data.graph;
+      for (var i = 0; i < g.length; i++)
+        gdata.push([g[i].date - 1000*60*60*4, g[i].value]);
+      abc.gdata = gdata;
+
     });
-    $this.hover(popshow);
   });
 }
 
 function popshow() {
-  api(URL + this.stock + ".json", null, function(data) {
-    console.log(data);
-
-    var gdata = [];
-    var g = data.graph;
-    for (var i = 0; i < g.length; i++)
-      gdata.push([g[i].date, g[i].value]);
-    console.log(gdata);
-    $('#container2').highcharts('StockChart', {
-
-      rangeSelector: {
-        inputEnabled: $('#container2').width() > 480,
-        selected: 1
-      },
-
-      title: {
-        text: data.name.symbol + ' Stock'
-      },
-
-      series: [{
-        name: data.name.symbol,
-        data: gdata,
-        type: 'spline',
-        tooltip: {
-          valueDecimals: 2
-        }
-      }]
-    });
-  });
   $this = $(this);
   $this.unbind('mouseenter mouseleave');
   $this.popover('show');
 
+  $('#graph'+this.counter).highcharts('StockChart', {
+
+    rangeSelector: {
+      enabled: false
+    },
+
+    title: {
+      text: this.titleHtml
+    },
+
+    series: [{
+      name: this.stock.symbol,
+      data: this.gdata,
+      type: 'spline',
+      tooltip: {
+        valueDecimals: 2
+      }
+    }],
+    scrollbar: { enabled: false },
+    exporting:{
+      enabled: false
+    },
+    navigator:{
+      enabled: false
+    }
+  });
+
 }
 
-var percent = 0.2;
+var percent = 0.1;
 
 function updateBoxes(ev) {
   $(".popover").each(function(k, b) {
     b = $(b)
     var ow = b.outerWidth();
-    var oh = b.outerHeight() + 30;
+    var oh = b.outerHeight() + 20;
     var off = b.offset();
     var top = off.top - oh * percent;
     var left = off.left - ow * percent;
@@ -176,6 +189,13 @@ function updateBoxes(ev) {
       $('.bloomberg').hover(popshow);
     }
   });
+}
+
+//pls use this, thank you
+function formatNumber(x){
+  x = parseFloat(x);
+  if( x > 1e6) return (x / 1e6).toFixed(2) + "M";
+  return numberWithCommas(x.toFixed(2))
 }
 
 function numberWithCommas(x) {
