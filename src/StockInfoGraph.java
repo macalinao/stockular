@@ -63,6 +63,8 @@ public class StockInfoGraph {
         else if (date.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY) {
         	date.add(Calendar.DAY_OF_MONTH, -1);
         }
+        date.set(Calendar.HOUR, 5);
+        date.set(Calendar.MINUTE, 30);
         return date;
     }
 
@@ -146,15 +148,17 @@ public class StockInfoGraph {
             int numEvents = bar.getElementAsInt32(NUM_EVENTS);
             long volume = bar.getElementAsInt64(VOLUME);
             
-            list.add(new StockValue(time.calendar().getTime().getTime(), close, volume));
+            Calendar cal = time.calendar();
+            cal.add(Calendar.HOUR, -4);
+            list.add(new StockValue(cal.getTime().getTime(), close, volume));
 
-            /*System.out.println(d_dateFormat.format(time.calendar().getTime()) + "\t" +
+            System.out.println(d_dateFormat.format(cal.getTime()) + "\t" +
                     d_decimalFormat.format(open) + "\t\t" +
                     d_decimalFormat.format(high) + "\t\t" +
                     d_decimalFormat.format(low) + "\t\t" +
                     d_decimalFormat.format(close) + "\t\t" +
                     d_decimalFormat.format(numEvents) + "\t\t" +
-                    d_decimalFormat.format(volume));*/
+                    d_decimalFormat.format(volume));
         }
     }
 
